@@ -1,0 +1,50 @@
+<!doctype html>
+<html ng-app xmlns="http://www.w3.org/1999/html">
+    <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+      <script src="consultant.js"></script>
+    </head>
+    <body>
+        <div ng-controller="NewConsultantCtrl">
+            <h2>New Consultant</h2>
+            <form ng-submit="newConsultant()">
+            <label>First Name:</label>
+            <input type="text" ng-model="first_name" placeholder="First Name"/>
+            <label>Last Name:</label>
+            <input type="text" ng-model="last_name" placeholder="Last Name"/>
+            <label>Role:</label>
+            <select ng-model="role">
+              <option>DEV</option>
+              <option>QA</option>
+              <option>BA</option>
+              <option>PM</option>
+            </select>
+              <label>Grade:</label><select ng-model="grade">
+              <option>Consultant</option>
+              <option>Senior</option>
+              <option>Lead</option>
+              <option>Principal</option>
+            </select>
+              <label>Home Office:</label><select ng-model="home_office">
+              <option>San Francisco</option>
+              <option>Chicago</option>
+              <option>Dallas</option>
+              <option>Toronto</option>
+              <option>New York</option>
+              <option>National</option>
+              </select>
+              <label>Roll On:</label><input type=date ng-model="roll_on_date"/>
+              <label>First Billable:</label><input type=date ng-model="first_billable_date"/>
+              <label>Roll Off:</label><input type=date ng-model="roll_off_date"/>
+
+              <input class="btn-primary" type=submit value="Add"/>
+            </form>
+            <hr/>
+            <ul class="unstyled">
+              <li ng-repeat="consultant in consultants">
+                {{consultant.first_name}} {{consultant.last_name}} {{consultant.role}}
+              </li>
+            </ul>
+        </div>
+    </body>
+</html>
