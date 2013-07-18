@@ -12,37 +12,20 @@
             <input type="text" ng-model="first_name" placeholder="First Name"/>
             <label>Last Name:</label>
             <input type="text" ng-model="last_name" placeholder="Last Name"/>
-            <label>Role:</label>
-            <select ng-model="role">
-              <option>DEV</option>
-              <option>QA</option>
-              <option>BA</option>
-              <option>PM</option>
-            </select>
-              <label>Grade:</label><select ng-model="grade">
-              <option>Consultant</option>
-              <option>Senior</option>
-              <option>Lead</option>
-              <option>Principal</option>
-            </select>
-              <label>Home Office:</label><select ng-model="home_office">
-              <option>San Francisco</option>
-              <option>Chicago</option>
-              <option>Dallas</option>
-              <option>Toronto</option>
-              <option>New York</option>
-              <option>National</option>
-              </select>
-              <label>Roll On:</label><input type=date ng-model="roll_on_date"/>
-              <label>First Billable:</label><input type=date ng-model="first_billable_date"/>
-              <label>Roll Off:</label><input type=date ng-model="roll_off_date"/>
-
+              <br/>
+              <label>Roles:</label>
+              <label>DEV</label><input type=checkbox ng-model="role_dev"/>
+              <label>QA</label><input type=checkbox ng-model="role_qa"/>
+              <label>BA</label><input type=checkbox ng-model="role_ba"/>
+              <label>PM</label><input type=checkbox ng-model="role_pm"/>
+              <label>Beeline GUID</label><input type=text ng-model="beeline_guid"/>
+              <label>Hours Needed</label><input type=number ng-model="hours_needed"/>
               <input class="btn-primary" type=submit value="Add"/>
             </form>
             <hr/>
             <ul class="unstyled">
               <li ng-repeat="consultant in consultants">
-                {{consultant.first_name}} {{consultant.last_name}} {{consultant.role}}
+                {{consultant.first_name}} {{consultant.last_name}} {{consultant.roles}}
               </li>
             </ul>
         </div>
