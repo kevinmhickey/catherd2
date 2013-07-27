@@ -99,3 +99,24 @@ describe 'Converting to Hash' do
     @consultant.to_hash[:hours_needed].should == 40
   end
 end
+
+describe 'Initializing from hash' do
+  before :each do
+    @hash = {"first_name" => "Kevin", "last_name" => "Hickey", "beeline_guid" => "12345678", "first_billable_date"=>"2012-08-01", "rolloff_date"=>"2014-12-31"}
+  end
+
+  it 'should initialize from hash with basic fields and no timecards' do
+    consultant = Consultant.from_hash @hash
+    consultant.first_name.should eq("Kevin")
+    consultant.last_name.should eq("Hickey")
+    consultant.beeline_guid.should eq("12345678")
+    consultant.first_billable_date.should eq(Date.new(2012,8,1))
+    consultant.rolloff_date.should eq(Date.new(2014,12,31))
+  end
+
+  it 'should add an empty array for timecards if none are present' do
+    @consultant = Consultant.from_hash @hash
+    @consultant.timecards.should eq([])
+  end
+
+end

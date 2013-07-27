@@ -37,8 +37,17 @@ end
               ]
 TEAMS
 
-get '/consultants' do
-  erb :new_consultant
+get '/consultant' do
+  erb :consultant
+end
+
+post '/consultant' do
+  new_consultant_as_hash = JSON.parse request.body.read
+  puts new_consultant_as_hash
+  new_consultant = Consultant.from_hash new_consultant_as_hash
+  @@cons << new_consultant
+
+  JSON.fast_generate new_consultant.to_hash
 end
 
 get '/consultants/list' do

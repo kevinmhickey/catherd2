@@ -1,0 +1,34 @@
+<!doctype html>
+<html ng-app xmlns="http://www.w3.org/1999/html">
+    <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+      <script src="consultant.js"></script>
+    </head>
+    <body>
+        <div ng-controller="ConsultantController">
+            <h2>New Consultant</h2>
+            <form ng-submit="addConsultant()">
+            <label>First Name:</label>
+            <input type="text" ng-model="new_consultant.first_name" placeholder="First Name"/>
+            <label>Last Name:</label>
+            <input type="text" ng-model="new_consultant.last_name" placeholder="Last Name"/>
+            <label>Beeline GUID</label><input type=text ng-model="new_consultant.beeline_guid"/>
+            <label>First Billable Date</label><input type=date ng-model="new_consultant.first_billable_date"/>
+            <label>Rolloff Date</label><input type=date ng-model="new_consultant.rolloff_date"/>
+
+            <input class="btn-primary" type=submit value="Add"/>
+            </form>
+            <hr/>
+            <table>
+              <tr><th>Last Name</th><th>First Name</th><th>Beeline GUID</th><th>First Billable Date</th><th>Rolloff Date</th></tr>
+              <tr ng-repeat="consultant in consultants">
+                <td>{{consultant.last_name}}</td>
+                <td>{{consultant.first_name}}</td>
+                <td>{{consultant.beeline_guid}}</td>
+                <td>{{consultant.first_billable_date}}</td>
+                <td>{{consultant.rolloff_date}}</td>
+              </tr>
+            </table>
+        </div>
+    </body>
+</html>

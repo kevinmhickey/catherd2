@@ -11,7 +11,7 @@ class Consultant
     @timecards = []
   end
 
-  attr_reader :beeline_guid
+  attr_reader :beeline_guid, :first_name, :last_name, :first_billable_date, :rolloff_date, :timecards
 
   def timecard_end_dates
     end_dates = Set.new
@@ -54,6 +54,14 @@ class Consultant
      :timecards => timecard_hashes,
      :hours_needed => total_hours_needed,
      }
+  end
+
+  def self.from_hash consultant_hash
+    Consultant.new consultant_hash["last_name"],
+                   consultant_hash["first_name"],
+                   consultant_hash["beeline_guid"],
+                   Date.parse(consultant_hash["first_billable_date"]),
+                   Date.parse(consultant_hash["rolloff_date"])
   end
 
 end
