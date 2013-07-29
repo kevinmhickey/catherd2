@@ -1,13 +1,10 @@
-<!doctype html>
-<html ng-app xmlns="http://www.w3.org/1999/html">
-<head>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-  <script src="../consultant_detail.js"></script>
-</head>
-<body>
-<!--<div ng-view></div>-->
-<div ng-controller="ConsultantDetailController">
+<div>
   <h2>{{consultant.first_name}} {{consultant.last_name}}</h2>
+    <table>
+        <tr align="right"><th>First Billable Date</th><td>{{consultant.first_billable_date}}</td></tr>
+        <tr align="right"><th>Rolloff Date</th><td>{{consultant.rolloff_date}}</td></tr>
+    </table>
+    <br/>
   <table>
     <tr>
       <th>Week Ending</th>
@@ -22,5 +19,3 @@
     </tr>
   </table>
 </div>
-</body>
-</html>

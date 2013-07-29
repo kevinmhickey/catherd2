@@ -3,6 +3,7 @@ angular.module('Timecards', []).
         $routeProvider.
             when('/timecards', {templateUrl: 'partials/timecard_summary.html',   controller: TimecardSummaryController}).
             when('/enter_time', {templateUrl: 'partials/timecard_enter_time.html', controller: TimecardController}).
+            when('/detail/:beeline_guid', {templateUrl: 'partials/timecard_detail.html', controller: TimecardDetailController}).
             otherwise({redirectTo: '/timecards'});
     }]);
 
@@ -104,4 +105,17 @@ function TimecardController($scope, $http) {
             }
         });
     }
+}
+
+function TimecardDetailController($scope, $http, $routeParams) {
+    $scope.beeline_guid = $routeParams.beeline_guid;
+
+    $http.get("consultant/beeline_guid/" + $scope.beeline_guid).success(function(consultant) {
+        $scope.consultant = consultant;
+    });
+
+    $http.get("../timecard/list_existing").success(function(existing_ending_dates) {
+        $scope.existing_timecards = existing_ending_dates;
+    });
+
 }
