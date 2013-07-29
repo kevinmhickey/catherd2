@@ -2,17 +2,18 @@ require File.dirname(__FILE__) + '/timecard'
 require 'date'
 
 class Consultant
-  def initialize id, last_name, first_name, beeline_guid, first_billable_date, rolloff_date
+  def initialize id, last_name, first_name, grade, beeline_guid, first_billable_date, rolloff_date
     @id = id
     @last_name = last_name
     @first_name = first_name
+    @grade = grade
     @beeline_guid = beeline_guid
     @first_billable_date = first_billable_date
     @rolloff_date = rolloff_date
     @timecards = []
   end
 
-  attr_reader :id, :beeline_guid, :first_name, :last_name, :first_billable_date, :rolloff_date, :timecards
+  attr_reader :id, :beeline_guid, :first_name, :last_name, :grade, :first_billable_date, :rolloff_date, :timecards
 
   def timecard_end_dates
     end_dates = Set.new
@@ -58,6 +59,7 @@ class Consultant
     {:id => @id,
      :last_name => @last_name,
      :first_name => @first_name,
+     :grade => @grade,
      :beeline_guid => @beeline_guid,
      :first_billable_date => @first_billable_date.to_s,
      :rolloff_date => @rolloff_date.to_s,
@@ -72,6 +74,7 @@ class Consultant
     Consultant.new consultant_hash["id"],
                    consultant_hash["last_name"],
                    consultant_hash["first_name"],
+                   consultant_hash["grade"],
                    consultant_hash["beeline_guid"],
                    Date.parse(consultant_hash["first_billable_date"]),
                    Date.parse(consultant_hash["rolloff_date"])

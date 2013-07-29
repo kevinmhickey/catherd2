@@ -6,7 +6,7 @@ require 'json'
 
 describe 'Safe behavior' do
   it 'should not add a timecard if one exists for the given time period' do
-    consultant = Consultant.new "khickey", "Hickey", "Kevin", "12345678", Date.new(2012, 8, 1), Date.new(2014, 12, 31)
+    consultant = Consultant.new "khickey", "Hickey", "Kevin", "lead", "12345678", Date.new(2012, 8, 1), Date.new(2014, 12, 31)
     ending_date = Date.new(2013, 06, 30)
     consultant.add_timecard ending_date
     expect { consultant.add_timecard(ending_date) }.to raise_error
@@ -16,7 +16,7 @@ end
 
 describe 'Listing timecard dates' do
   before :each do
-    @consultant = Consultant.new "khickey", "Hickey", "Kevin", "12345678", Date.new(2012, 8, 1), Date.new(2014, 12, 31)
+    @consultant = Consultant.new "khickey", "Hickey", "Kevin", "lead", "12345678", Date.new(2012, 8, 1), Date.new(2014, 12, 31)
   end
 
   it 'should return empty set if no timecards' do
@@ -41,7 +41,7 @@ describe 'Converting to Hash' do
   before :each do
     @first_billable_date = Date.new(2012, 8, 1)
     @rolloff_date = Date.new(2014, 12, 31)
-    @consultant = Consultant.new "khickey", "Hickey", "Kevin", "12345678", @first_billable_date, @rolloff_date
+    @consultant = Consultant.new "khickey", "Hickey", "Kevin", "lead", "12345678", @first_billable_date, @rolloff_date
   end
 
   it 'should include the id' do
@@ -70,6 +70,10 @@ describe 'Converting to Hash' do
 
   it 'should include the rolloff date' do
     @consultant.to_hash[:rolloff_date].should == "2014-12-31"
+  end
+
+  it 'should include the consultants grade' do
+    @consultant.to_hash[:grade].should == "lead"
   end
 
   it 'should include timecards if any are added' do
@@ -106,7 +110,7 @@ end
 
 describe 'Initializing from hash' do
   before :each do
-    @hash = {"id" => "khickey", "first_name" => "Kevin", "last_name" => "Hickey", "beeline_guid" => "12345678", "first_billable_date"=>"2012-08-01", "rolloff_date"=>"2014-12-31"}
+    @hash = {"id" => "khickey", "first_name" => "Kevin", "last_name" => "Hickey", "grade" => "lead", "beeline_guid" => "12345678", "first_billable_date"=>"2012-08-01", "rolloff_date"=>"2014-12-31"}
   end
 
   it 'should initialize from hash with basic fields and no timecards' do
@@ -117,6 +121,7 @@ describe 'Initializing from hash' do
     consultant.beeline_guid.should eq("12345678")
     consultant.first_billable_date.should eq(Date.new(2012,8,1))
     consultant.rolloff_date.should eq(Date.new(2014,12,31))
+    consultant.grade.should eq("lead")
   end
 
   it 'should add an empty array for timecards if none are present' do
