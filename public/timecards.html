@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="Timecards">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="script/timecards.js"></script>
+
+    <title>CatHerd Timecards</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <th><a href="#/timecards">Timecard Summary</a></th>
+                <th><a href="#/enter_time">Enter Time</a></th>
+            </tr>
+        </table>
+    </div>
+    <hr>
+    <div ng-view>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<div>
+  <h2>Enter Time</h2></p>
+  <label>Week Ending <i>Hint: Pick Sunday</i></label><input type="date" ng-model="week_ending"/>
+  <button ng-click="addTimecard(week_ending)" ng-hide="timecardExists(week_ending)">Add Timecard</button>
+  <hr/>
+    <button ng-click="enterSelectedTimes()">Enter Selected Times</button>
+  <table ng-show="timecardExists(week_ending)">
+    <tr align="center">
+      <td>Enter Time</br><input type=checkbox ng-change="toggleEnterAll()" ng-model="enter_all"/></td>
+      <td>Name</td>
+      <td>GUID</td>
+      <td>Hours to Enter</td>
+      <td>Remaining Hours Needed</td>
+      <td>Hours Submitted</td>
+      <td></td>
+    </tr>
+    <tr align="center" ng-repeat="consultant in consultants">
+      <td><input type=checkbox ng-model="consultant.enter_time"/></td>
+      <td>{{consultant.last_name}}</td>
+      <td>{{consultant.beeline_guid}}</td>
+      <td ng-repeat="timecard in consultant.timecards | filter:week_ending">
+        <input type=number ng-model="timecard.hours_to_enter"/></td>
+      <td ng-repeat="timecard in consultant.timecards | filter:week_ending">{{consultant.hours_needed -
+        timecard.hours_to_enter}}
+      </td>
+      <td ng-repeat="timecard in consultant.timecards | filter:week_ending">{{timecard.hours_submitted}}</td>
+      <td ng-repeat="timecard in consultant.timecards | filter:week_ending">
+      </td>
+    </tr>
+  </table>
+</div>
