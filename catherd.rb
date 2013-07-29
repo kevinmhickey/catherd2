@@ -38,10 +38,6 @@ end
               ]
 TEAMS
 
-get '/consultant' do
-  erb :consultant
-end
-
 post '/consultant' do
   new_consultant_as_hash = JSON.parse request.body.read
   puts new_consultant_as_hash
