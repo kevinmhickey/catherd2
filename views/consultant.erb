@@ -8,25 +8,32 @@
         <div ng-controller="ConsultantController">
             <h2>New Consultant</h2>
             <form ng-submit="addConsultant()">
-            <label>First Name:</label>
-            <input type="text" ng-model="new_consultant.first_name" placeholder="First Name"/>
-            <label>Last Name:</label>
-            <input type="text" ng-model="new_consultant.last_name" placeholder="Last Name"/>
-            <label>Beeline GUID</label><input type=text ng-model="new_consultant.beeline_guid"/>
-            <label>First Billable Date</label><input type=date ng-model="new_consultant.first_billable_date"/>
-            <label>Rolloff Date</label><input type=date ng-model="new_consultant.rolloff_date"/>
-
+              <table>
+                <tr>
+                  <td><label>Email ID</label><input type="text" ng-model="new_consultant.id" placeholder="Email ID"/></td>
+                  <td><label>First Name</label><input type="text" ng-model="new_consultant.first_name" placeholder="First Name"/></td>
+                  <td><label>Last Name</label><input type="text" ng-model="new_consultant.last_name" placeholder="Last Name"/></td>
+                </tr>
+                <tr>
+                  <td><label>Beeline GUID</label><input type=text ng-model="new_consultant.beeline_guid" placeholder="Beeline GUID"/></td>
+                  <td><label>First Billable Date</label><input type=date ng-model="new_consultant.first_billable_date"/></td>
+                  <td><label>Rolloff Date</label><input type=date ng-model="new_consultant.rolloff_date"/></td>
+                </tr>
+              </table>
             <input class="btn-primary" type=submit value="Add"/>
             </form>
             <hr/>
             <table>
-              <tr><th>Last Name</th><th>First Name</th><th>Beeline GUID</th><th>First Billable Date</th><th>Rolloff Date</th></tr>
+              <tr><th>ID</th><th>Last Name</th><th>First Name</th><th>Beeline GUID</th><th>First Billable Date</th><th>Rolloff Date</th><th>Total Hours Worked</th><th>Total Hours Submitted</th></tr>
               <tr ng-repeat="consultant in consultants">
+                <td>{{consultant.id}}</td>
                 <td>{{consultant.last_name}}</td>
                 <td>{{consultant.first_name}}</td>
-                <td>{{consultant.beeline_guid}}</td>
+                <td><a href="consultant/detail#?beeline_guid={{consultant.beeline_guid}}">{{consultant.beeline_guid}}</a></td>
                 <td>{{consultant.first_billable_date}}</td>
                 <td>{{consultant.rolloff_date}}</td>
+                <td>{{consultant.total_hours_worked}}</td>
+                <td>{{consultant.total_hours_submitted}}</td>
               </tr>
             </table>
         </div>

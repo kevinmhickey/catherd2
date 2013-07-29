@@ -1,0 +1,26 @@
+<!doctype html>
+<html ng-app xmlns="http://www.w3.org/1999/html">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <script src="../consultant_detail.js"></script>
+</head>
+<body>
+<!--<div ng-view></div>-->
+<div ng-controller="ConsultantDetailController">
+  <h2>{{consultant.first_name}} {{consultant.last_name}}</h2>
+  <table>
+    <tr>
+      <th>Week Ending</th>
+      <th>Worked</th>
+      <th>Submitted</th>
+    </tr>
+    <tr ng-repeat="timecard in consultant.timecards">
+      <td>{{timecard.week_ending}}</td>
+      <td>{{timecard.hours_worked}}</td>
+      <td>{{timecard.hours_submitted}}</td>
+
+    </tr>
+  </table>
+</div>
+</body>
+</html>

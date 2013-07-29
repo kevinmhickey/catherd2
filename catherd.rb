@@ -16,10 +16,11 @@ require 'consultant'
               ]
 CONSULTANTS
 
-@@cons = [Consultant.new("Hickey", "Kevin", "00090026915", Date.new(2012, 8, 1), Date.new(2014, 12, 31)),
-          Consultant.new("Nelson", "David", "00090026917", Date.new(2012, 8, 1), Date.new(2013, 7, 9)),
-          Consultant.new("Dearborne", "Cecil", "00090027138", Date.new(2012, 11, 15), Date.new(2013, 7, 5)),
-          Consultant.new("Nwabara", "Chisa", "00090028544", Date.new(2013, 1, 22), Date.new(2013, 9, 30))]
+#@@cons = [Consultant.new("khickey", "Hickey", "Kevin", "00090026915", Date.new(2012, 8, 1), Date.new(2014, 12, 31)),
+#          Consultant.new("danelson", "Nelson", "David", "00090026917", Date.new(2012, 8, 1), Date.new(2013, 7, 9)),
+#          Consultant.new("cdearbor", "Dearborne", "Cecil", "00090027138", Date.new(2012, 11, 15), Date.new(2013, 7, 5)),
+#          Consultant.new("cnwbara", "Nwabara", "Chisa", "00090028544", Date.new(2013, 1, 22), Date.new(2013, 9, 30))]
+@@cons = []
 
 def consultants_as_json
   consultant_hashes = []
@@ -50,9 +51,17 @@ post '/consultant' do
   JSON.fast_generate new_consultant.to_hash
 end
 
+get '/consultant/beeline_guid/:beeline_guid' do
+  JSON.fast_generate @@cons.find {|consultant| consultant.beeline_guid == params[:beeline_guid]}.to_hash
+end
+
 get '/consultants/list' do
   content_type :json
   consultants_as_json
+end
+
+get '/consultant/detail' do
+  erb :consultant_detail
 end
 
 #get '/teams' do
@@ -118,6 +127,19 @@ post '/timecard/enter_time' do
   end
 
   beeline.close
+  consultants_as_json
+end
+
+post '/timecard/time_submitted' do
+  week_ending_date = Date.strptime params["week_ending"], '%Y-%m-%d'
+  beeline_guid = params["beeline_guid"]
+  hours_to_enter = params["hours_to_enter"]
+  puts "Entering #{hours_to_enter} hours for #{beeline_guid} for week #{week_ending_date}"
+  consultant = @@cons.find {|consultant| consultant.beeline_guid == beeline_guid}
+  puts "Found #{consultant.last_name}"
+
+  consultant.time_submitted week_ending_date, hours_to_enter.to_i
+
   consultants_as_json
 end
 

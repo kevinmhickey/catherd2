@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/timecard'
 require 'date'
 
 class Consultant
-  def initialize last_name, first_name, beeline_guid, first_billable_date, rolloff_date
+  def initialize id, last_name, first_name, beeline_guid, first_billable_date, rolloff_date
+    @id = id
     @last_name = last_name
     @first_name = first_name
     @beeline_guid = beeline_guid
@@ -11,7 +12,7 @@ class Consultant
     @timecards = []
   end
 
-  attr_reader :beeline_guid, :first_name, :last_name, :first_billable_date, :rolloff_date, :timecards
+  attr_reader :id, :beeline_guid, :first_name, :last_name, :first_billable_date, :rolloff_date, :timecards
 
   def timecard_end_dates
     end_dates = Set.new
@@ -40,24 +41,36 @@ class Consultant
     hours_worked - hours_submitted
   end
 
+  def total_hours_worked
+    @timecards.inject(0) {|total, timecard| total + timecard.hours_worked }
+  end
+
+  def total_hours_submitted
+    @timecards.inject(0) {|total, timecard| total + timecard.hours_submitted }
+  end
+
   def to_hash
     timecard_hashes = []
     @timecards.each do |timecard|
       timecard_hashes << timecard.to_hash
     end
 
-    {:last_name => @last_name,
+    {:id => @id,
+     :last_name => @last_name,
      :first_name => @first_name,
      :beeline_guid => @beeline_guid,
      :first_billable_date => @first_billable_date.to_s,
      :rolloff_date => @rolloff_date.to_s,
      :timecards => timecard_hashes,
      :hours_needed => total_hours_needed,
+     :total_hours_worked => total_hours_worked,
+     :total_hours_submitted => total_hours_submitted
      }
   end
 
   def self.from_hash consultant_hash
-    Consultant.new consultant_hash["last_name"],
+    Consultant.new consultant_hash["id"],
+                   consultant_hash["last_name"],
                    consultant_hash["first_name"],
                    consultant_hash["beeline_guid"],
                    Date.parse(consultant_hash["first_billable_date"]),
