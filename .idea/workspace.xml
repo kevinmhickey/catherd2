@@ -2,20 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4405c45b-6458-444f-be9a-43d2b0dd2723" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/consultant.rb" afterPath="$PROJECT_DIR$/lib/consultant.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/consultant_spec.rb" afterPath="$PROJECT_DIR$/test/consultant_spec.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/catherd.rb" afterPath="$PROJECT_DIR$/catherd.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/partials/timecard_detail.html" afterPath="$PROJECT_DIR$/public/partials/timecard_detail.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/script/timecards.js" afterPath="$PROJECT_DIR$/public/script/timecards.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="catherd2.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375134380096" ignored="false" />
+    <file path="/Dummy.txt" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375135337909" ignored="false" />
     <file path="/consultant.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375135129867" ignored="false" />
     <file path="/consultant_spec.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375135076336" ignored="false" />
     <file path="/temp.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1374944383823" ignored="false" />
     <file path="/timecard_spec.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1374767114047" ignored="false" />
     <file path="/timecard.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1374767196347" ignored="false" />
-    <file path="/catherd.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375109758295" ignored="false" />
+    <file path="/catherd.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375194576037" ignored="false" />
     <file path="/beeline.js" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1374785874007" ignored="false" />
     <file path="/enter_time.erb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1374941919813" ignored="false" />
     <file path="/fragment.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1374958666897" ignored="false" />
@@ -28,10 +28,10 @@
     <file path="/consultant_detail.js" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375069373025" ignored="false" />
     <file path="/index.html" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375109685923" ignored="false" />
     <file path="/timecards.html" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375124608766" ignored="false" />
-    <file path="/timecards.js" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375132655226" ignored="false" />
+    <file path="/timecards.js" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375195307241" ignored="false" />
     <file path="/timecard_summary.html" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375132074192" ignored="false" />
     <file path="/timecard_enter_time.html" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375125746871" ignored="false" />
-    <file path="/timecard_detail.html" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375135184938" ignored="false" />
+    <file path="/timecard_detail.html" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375195395014" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,16 +54,7 @@
       <file leaf-file-name="catherd.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/catherd.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="0" selection-start="1956" selection-end="1956" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="import_consultants.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/import_consultants.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="21" selection-start="761" selection-end="761" vertical-scroll-proportion="0.0">
+            <state line="148" column="0" selection-start="4655" selection-end="4655" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -72,7 +63,16 @@
       <file leaf-file-name="timecard_detail.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/partials/timecard_detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="64" selection-start="336" selection-end="336" vertical-scroll-proportion="0.14851485">
+            <state line="6" column="81" selection-start="428" selection-end="428" vertical-scroll-proportion="0.17045455">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="timecards.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/script/timecards.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="121" column="28" selection-start="4672" selection-end="4672" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -82,60 +82,6 @@
         <entry file="file://$PROJECT_DIR$/public/timecards.html">
           <provider selected="true" editor-type-id="text-editor">
             <state line="13" column="62" selection-start="420" selection-end="420" vertical-scroll-proportion="-8.125">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="timecards.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/script/timecards.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="110" column="0" selection-start="4244" selection-end="4244" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="consultant.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/consultant.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="44" selection-start="2338" selection-end="2338" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="consultant_spec.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/consultant_spec.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="75" column="0" selection-start="2329" selection-end="2329" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="timecard.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/timecard.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="timecard_summary.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/partials/timecard_summary.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="34" selection-start="462" selection-end="462" vertical-scroll-proportion="-5.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="consultant.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/script/consultant.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="0" selection-start="151" selection-end="151" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -173,14 +119,14 @@
         <option value="$PROJECT_DIR$/import_consultants.rb" />
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/consultant.html" />
-        <option value="$PROJECT_DIR$/catherd.rb" />
         <option value="$PROJECT_DIR$/public/script/timecard.js" />
         <option value="$PROJECT_DIR$/public/timecards.html" />
         <option value="$PROJECT_DIR$/public/partials/timecard_enter_time.html" />
         <option value="$PROJECT_DIR$/public/partials/timecard_summary.html" />
-        <option value="$PROJECT_DIR$/public/script/timecards.js" />
         <option value="$PROJECT_DIR$/test/consultant_spec.rb" />
         <option value="$PROJECT_DIR$/lib/consultant.rb" />
+        <option value="$PROJECT_DIR$/catherd.rb" />
+        <option value="$PROJECT_DIR$/public/script/timecards.js" />
         <option value="$PROJECT_DIR$/public/partials/timecard_detail.html" />
       </list>
     </option>
@@ -678,7 +624,11 @@
       <created>1375134384728</created>
       <updated>1375134384728</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added Grade to consultant and the timecard detail screen.">
+      <created>1375135341212</created>
+      <updated>1375135341212</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -696,7 +646,7 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34186938" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -748,7 +698,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Further consolidated timecard operations into the timecard app." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Grade to consultant and the timecard detail screen." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -769,6 +719,7 @@
     <MESSAGE value="Moved timecard page to static html and js to script directory" />
     <MESSAGE value="Consolidated timecards to a single page and allowed multiple entry for timecards." />
     <MESSAGE value="Further consolidated timecard operations into the timecard app." />
+    <MESSAGE value="Added Grade to consultant and the timecard detail screen." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -777,11 +728,6 @@
           <url>file://$PROJECT_DIR$/lib/beeline.rb</url>
           <line>29</line>
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="ruby-line">
-          <url>file://$PROJECT_DIR$/catherd.rb</url>
-          <line>134</line>
-          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="15" />
@@ -816,51 +762,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/timecards.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="62" selection-start="420" selection-end="420" vertical-scroll-proportion="-8.125">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/partials/timecard_summary.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="34" selection-start="462" selection-end="462" vertical-scroll-proportion="-5.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/script/timecards.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="0" selection-start="4244" selection-end="4244" vertical-scroll-proportion="0.0">
+        <state line="8" column="34" selection-start="462" selection-end="462" vertical-scroll-proportion="0.23300971">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/script/consultant.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="151" selection-end="151" vertical-scroll-proportion="0.0">
+        <state line="6" column="0" selection-start="151" selection-end="151" vertical-scroll-proportion="0.16304348">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/consultant_spec.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="0" selection-start="2329" selection-end="2329" vertical-scroll-proportion="0.0">
+        <state line="75" column="0" selection-start="2329" selection-end="2329" vertical-scroll-proportion="1.0853432">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/consultant.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="44" selection-start="2338" selection-end="2338" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/catherd.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1956" selection-end="1956" vertical-scroll-proportion="0.0">
+        <state line="76" column="44" selection-start="2338" selection-end="2338" vertical-scroll-proportion="0.67391306">
           <folding />
         </state>
       </provider>
@@ -872,9 +797,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/script/timecards.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="121" column="28" selection-start="4672" selection-end="4672" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/timecards.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="62" selection-start="420" selection-end="420" vertical-scroll-proportion="-8.125">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/catherd.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="148" column="0" selection-start="4655" selection-end="4655" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/partials/timecard_detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="64" selection-start="336" selection-end="336" vertical-scroll-proportion="0.14851485">
+        <state line="6" column="81" selection-start="428" selection-end="428" vertical-scroll-proportion="0.17045455">
           <folding />
         </state>
       </provider>

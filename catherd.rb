@@ -22,6 +22,13 @@ CONSULTANTS
 #          Consultant.new("cnwbara", "Nwabara", "Chisa", "00090028544", Date.new(2013, 1, 22), Date.new(2013, 9, 30))]
 @@cons = []
 
+@@rates = {"consultant" => 157.50,
+           "senior" => 168.75,
+           "lead" => 180.00,
+           "principal" => 202.50,
+           "director" => 219.38
+}
+
 def consultants_as_json
   consultant_hashes = []
   @@cons.each do |consultant|
@@ -139,6 +146,7 @@ post '/timecard/time_submitted' do
   consultants_as_json
 end
 
-get '/timecard' do
-  erb :timecard
+get '/rates' do
+  content_type :json
+  JSON.fast_generate @@rates
 end

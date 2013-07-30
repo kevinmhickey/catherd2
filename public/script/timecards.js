@@ -118,4 +118,8 @@ function TimecardDetailController($scope, $http, $routeParams) {
         $scope.existing_timecards = existing_ending_dates;
     });
 
+    $http.get("rates").success(function(rates) {
+       $scope.rates = rates;
+    });
+
 }
