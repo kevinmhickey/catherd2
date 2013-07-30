@@ -1,0 +1,13 @@
+<div>
+    <h2>Monthly Report for {{report_month}}/{{report_year}}</h2>
+    <table>
+        <tr><th>Total Fees</th><td>{{total_fees | currency:$}}</td></tr>
+        <tr><th>Discounted Fees (9%)</th><td>{{total_fees_discounted | currency:$}}</td></tr>
+        <tr><th>Expenses (12% of Fees)</th><td>{{expenses | currency:$}}</td></tr>
+    </table>
+    <table>
+        <tr><th ng-repeat="header in table_headers">{{header}}</th></tr>
+        <tr ng-repeat="line in table_lines"><td ng-repeat="field in line">{{field}}</td></tr>
+    </table>
+
+</div>
