@@ -116,20 +116,20 @@ post '/timecard/enter_time' do
   hours_to_enter = params["hours_to_enter"]
   consultant = @@cons.find {|consultant| consultant.beeline_guid == beeline_guid}
 
-  #beeline = Beeline.new()
+  beeline = Beeline.new()
   begin
-    #puts "impersonating #{beeline_guid}"
-    #beeline.impersonate beeline_guid
-    #beeline.enter_time week_ending_date, hours_to_enter.to_i
+    puts "impersonating #{beeline_guid}"
+    beeline.impersonate beeline_guid
+    beeline.enter_time week_ending_date, hours_to_enter.to_i
     consultant.time_submitted week_ending_date, hours_to_enter.to_i
   rescue Exception => e
     puts e.message
-    #consultant.time_submitted week_ending_date, 0
+    consultant.time_submitted week_ending_date, 0
   ensure
-    #beeline.stop_impersonating
+    beeline.stop_impersonating
   end
 
-  #beeline.close
+  beeline.close
   consultants_as_json
 end
 

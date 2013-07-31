@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4405c45b-6458-444f-be9a-43d2b0dd2723" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/partials/timecard_monthly_report.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/catherd.rb" afterPath="$PROJECT_DIR$/catherd.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/timecards.html" afterPath="$PROJECT_DIR$/public/timecards.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/script/timecards.js" afterPath="$PROJECT_DIR$/public/script/timecards.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="catherd2.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375200315412" ignored="false" />
+    <file path="/Dummy.txt" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375213932170" ignored="false" />
     <file path="/consultant.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375135129867" ignored="false" />
     <file path="/consultant_spec.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1375135076336" ignored="false" />
     <file path="/temp.rb" changelist="4405c45b-6458-444f-be9a-43d2b0dd2723" time="1374944383823" ignored="false" />
@@ -53,10 +50,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="catherd.rb" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="catherd.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/catherd.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="131" column="3" selection-start="4126" selection-end="4126" vertical-scroll-proportion="0.0">
+            <state line="128" column="4" selection-start="4083" selection-end="4083" vertical-scroll-proportion="0.58441556">
               <folding />
             </state>
           </provider>
@@ -80,10 +77,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="timecards.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="timecards.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/script/timecards.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="97" column="17" selection-start="3987" selection-end="3987" vertical-scroll-proportion="2.6894639">
+            <state line="97" column="17" selection-start="3987" selection-end="3987" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -145,9 +142,9 @@
         <option value="$PROJECT_DIR$/lib/consultant.rb" />
         <option value="$PROJECT_DIR$/public/partials/timecard_detail.html" />
         <option value="$PROJECT_DIR$/public/timecards.html" />
-        <option value="$PROJECT_DIR$/catherd.rb" />
         <option value="$PROJECT_DIR$/public/script/timecards.js" />
         <option value="$PROJECT_DIR$/public/partials/timecard_monthly_report.html" />
+        <option value="$PROJECT_DIR$/catherd.rb" />
       </list>
     </option>
   </component>
@@ -652,18 +649,23 @@
       <created>1375195454733</created>
       <updated>1375195454733</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Added Monthly Report for July only (for now)">
+      <created>1375213936139</created>
+      <updated>1375213936139</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="36" y="22" width="1404" height="878" extended-state="6" />
-    <editor active="false" />
+    <frame x="36" y="22" width="1404" height="878" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.256705" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25736237" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19513991" sideWeight="0.743295" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19513991" sideWeight="0.74263763" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3989402" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -673,7 +675,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32522407" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5492958" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -722,7 +723,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added rates (hard coded since they don't change) and include them on the timecard detail page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Monthly Report for July only (for now)" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -745,6 +746,7 @@
     <MESSAGE value="Further consolidated timecard operations into the timecard app." />
     <MESSAGE value="Added Grade to consultant and the timecard detail screen." />
     <MESSAGE value="Added rates (hard coded since they don't change) and include them on the timecard detail page" />
+    <MESSAGE value="Added Monthly Report for July only (for now)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -815,13 +817,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/catherd.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="3" selection-start="4126" selection-end="4126" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/timecards.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="61" selection-start="482" selection-end="482" vertical-scroll-proportion="-8.75">
@@ -838,7 +833,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/script/timecards.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="97" column="17" selection-start="3987" selection-end="3987" vertical-scroll-proportion="2.6894639">
+        <state line="97" column="17" selection-start="3987" selection-end="3987" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/catherd.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="128" column="4" selection-start="4083" selection-end="4083" vertical-scroll-proportion="0.58441556">
           <folding />
         </state>
       </provider>
