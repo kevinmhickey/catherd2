@@ -1,0 +1,30 @@
+<div>
+    <form ng-submit="saveConfiguration()">
+        <table>
+            <tr>
+                <th>Mode</th>
+                <td>
+                    <select ng-model="configuration.mode">
+                        <option>Development</option>
+                        <option>Production</option>
+                    </select>
+
+                </td>
+            </tr>
+            <tr>
+                <th>Parse Application ID</th>
+                <td><input size=60 type=text ng-model="configuration.parse_application_id"/></td>
+            </tr>
+            <tr>
+                <th>Parse API Key</th>
+                <td><input size=60 type=text ng-model="configuration.parse_api_key"/></td>
+            </tr>
+            <tr>
+                <th>Submit to Beeline?</th>
+                <td><input type=checkbox ng-model="configuration.submit_to_beeline"/></td>
+            </tr>
+        </table>
+
+        <button type=submit>Save</button>
+    </form>
+</div>

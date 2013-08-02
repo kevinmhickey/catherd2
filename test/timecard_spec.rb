@@ -65,4 +65,32 @@ describe 'Convert to Hash' do
     @timecard.hours_submitted = 40
     @timecard.to_hash[:hours_submitted].should == 40
   end
+
+  it 'should include the state as UNSUBMITTED if no hours submitted' do
+    @timecard.to_hash[:state].should eq "UNSUBMITTED"
+  end
+end
+
+describe 'States' do
+  before :each do
+    @first_billable_date = Date.new(2013, 1, 1)
+    @week_ending_date = Date.new(2013, 6, 30)
+    @rolloff_date = Date.new(2014, 1, 1)
+
+    @timecard = Timecard.new @week_ending_date, @rolloff_date, @first_billable_date
+  end
+
+  it 'should initialize to UNSUBMITTED' do
+    @timecard.state.should eq :UNSUBMITTED
+  end
+
+  it 'should change to SUBMITTED if any hours submitted' do
+    @timecard.hours_submitted = 40
+    @timecard.state.should eq :SUBMITTED
+  end
+
+  it 'should change to FAILED if hour submission failed' do
+    @timecard.submit_failed
+    @timecard.state.should eq :FAILED
+  end
 end

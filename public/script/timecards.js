@@ -5,6 +5,7 @@ angular.module('Timecards', []).
             when('/enter_time', {templateUrl: 'partials/timecard_enter_time.html', controller: TimecardController}).
             when('/detail/:beeline_guid', {templateUrl: 'partials/timecard_detail.html', controller: TimecardDetailController}).
             when('/monthly_report/:month/:year', {templateUrl: 'partials/timecard_monthly_report.html', controller: TimecardMonthlyReportController}).
+            when('/configuration', {templateUrl: 'partials/timecard_configuration.html', controller: TimecardConfigurationController}).
             when('/monthly_report', {redirectTo: '/monthly_report/07/2013'}).
             otherwise({redirectTo: '/timecards'});
     }]);
@@ -210,4 +211,21 @@ function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
         });
     }
 
+}
+
+function TimecardConfigurationController($scope, $http) {
+    $http.get("configuration").success(function(configuration) {
+        $scope.configuration = configuration;
+    });
+
+    $scope.saveConfiguration = function() {
+        $http({
+            method: 'POST',
+            url: 'configuration',
+            data: JSON.stringify($scope.configuration),
+            headers: {'Content-Type': 'application/JSON'}
+        }).success(function(configuration) {
+            $scope.configuration = configuration;
+        });
+    }
 }

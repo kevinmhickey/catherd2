@@ -5,8 +5,6 @@ require 'beeline_timecard'
 require 'billable_person'
 
 class Beeline
-    @@PROJECT_CODE = "00623036001"
-
     def initialize
         @driver = Selenium::WebDriver.for :firefox
         @driver.manage.timeouts.implicit_wait = 15
@@ -26,7 +24,7 @@ class Beeline
         billable_person.stop_impersonating
     end
 
-    def enter_time week_ending_date, hours_for_week
+    def enter_time ebs_number, week_ending_date, hours_for_week
         t = BeelineTimecard.new @driver
         if (hours_for_week <= 40)
           hours_per_day = [8] * (hours_for_week / 8)
@@ -35,8 +33,8 @@ class Beeline
         end
 
         t.select week_ending_date
-        t.enter_time @@PROJECT_CODE, hours_per_day
-        #t.submit
+        t.enter_time ebs_number, hours_per_day
+        t.submit
     end
 
     def close

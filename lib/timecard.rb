@@ -4,10 +4,10 @@ class Timecard
     @start_date = start_date
     @rolloff_date = rolloff_date
     @hours_submitted = 0
+    @state = :UNSUBMITTED
   end
 
-  attr_accessor :hours_submitted
-  attr_reader :week_ending_date
+  attr_reader :week_ending_date, :state, :hours_submitted
 
   def working_on? day, rolloff_date, start_date
     return day <= rolloff_date && day >= start_date
@@ -24,9 +24,20 @@ class Timecard
     hours_worked
   end
 
+  def hours_submitted= hours
+    @hours_submitted = hours
+    @state = :SUBMITTED
+  end
+
+  def submit_failed
+    @state = :FAILED
+  end
+
   def to_hash
     {:week_ending => @week_ending_date.to_s,
      :hours_worked => self.hours_worked,
-     :hours_submitted => @hours_submitted}
+     :hours_submitted => @hours_submitted,
+     :state => @state.to_s
+    }
   end
 end

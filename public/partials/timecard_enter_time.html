@@ -12,6 +12,7 @@
       <td>Hours to Enter</td>
       <td>Remaining Hours Needed</td>
       <td>Hours Submitted</td>
+      <th>State</th>
       <td></td>
     </tr>
     <tr align="center" ng-repeat="consultant in consultants">
@@ -24,7 +25,7 @@
         timecard.hours_to_enter}}
       </td>
       <td ng-repeat="timecard in consultant.timecards | filter:week_ending">{{timecard.hours_submitted}}</td>
-      <td ng-repeat="timecard in consultant.timecards | filter:week_ending">
+      <td ng-repeat="timecard in consultant.timecards | filter:week_ending">{{timecard.state}}
       </td>
     </tr>
   </table>

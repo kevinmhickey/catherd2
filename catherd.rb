@@ -16,11 +16,7 @@ require 'consultant'
               ]
 CONSULTANTS
 
-#@@cons = [Consultant.new("khickey", "Hickey", "Kevin", "00090026915", Date.new(2012, 8, 1), Date.new(2014, 12, 31)),
-#          Consultant.new("danelson", "Nelson", "David", "00090026917", Date.new(2012, 8, 1), Date.new(2013, 7, 9)),
-#          Consultant.new("cdearbor", "Dearborne", "Cecil", "00090027138", Date.new(2012, 11, 15), Date.new(2013, 7, 5)),
-#          Consultant.new("cnwbara", "Nwabara", "Chisa", "00090028544", Date.new(2013, 1, 22), Date.new(2013, 9, 30))]
-@@cons = []
+@@consultants = []
 
 @@rates = {"consultant" => 157.50,
            "senior" => 168.75,
@@ -29,14 +25,26 @@ CONSULTANTS
            "director" => 219.38
 }
 
+@@projects = {"Execution Services" => "00686202001",
+              "AQP" => "00684057001",
+              "FAR117" => "00686200001",
+              "CODA AIT" => "00686191001",
+}
+
 def consultants_as_json
   consultant_hashes = []
-  @@cons.each do |consultant|
+  @@consultants.each do |consultant|
     consultant_hashes << consultant.to_hash
   end
 
   JSON.fast_generate consultant_hashes
 end
+
+@@config = {"mode" => "Development",
+            "parse_application_id" => "WjDbcDcAfMJUPk01nfIZAP85skoEZGFGBKjuPsW3",
+            "parse_api_key" => "Gr450bHB3lPuURvSaraBOVTlO4ovBiSiIXOlhUzd",
+            "submit_to_beeline" => true
+}
 
 @@teams = <<TEAMS
               [
@@ -45,17 +53,26 @@ end
               ]
 TEAMS
 
+get '/configuration' do
+  JSON.fast_generate @@config
+end
+
+post '/configuration' do
+  @@config = JSON.parse request.body.read
+  JSON.fast_generate @@config
+end
+
 post '/consultant' do
   new_consultant_as_hash = JSON.parse request.body.read
   puts new_consultant_as_hash
   new_consultant = Consultant.from_hash new_consultant_as_hash
-  @@cons << new_consultant
+  @@consultants << new_consultant
 
   JSON.fast_generate new_consultant.to_hash
 end
 
 get '/consultant/beeline_guid/:beeline_guid' do
-  JSON.fast_generate @@cons.find {|consultant| consultant.beeline_guid == params[:beeline_guid]}.to_hash
+  JSON.fast_generate @@consultants.find {|consultant| consultant.beeline_guid == params[:beeline_guid]}.to_hash
 end
 
 get '/consultants/list' do
@@ -89,7 +106,7 @@ end
 post '/timecard/add' do
   week_ending_date = Date.strptime request[:week_ending_date], '%Y-%m-%d'
   consultants_as_hash = []
-  @@cons.each do |consultant|
+  @@consultants.each do |consultant|
     consultant.add_timecard week_ending_date
     consultants_as_hash << consultant.to_hash
   end
@@ -101,7 +118,7 @@ get '/timecard/list_existing' do
   content_type :json
   existing_timecards = Set.new
 
-  @@cons.each do |consultant|
+  @@consultants.each do |consultant|
     consultant.timecard_end_dates.each do |end_date|
       existing_timecards.add end_date
     end
@@ -114,22 +131,25 @@ post '/timecard/enter_time' do
   week_ending_date = Date.strptime params["week_ending"], '%Y-%m-%d'
   beeline_guid = params["beeline_guid"]
   hours_to_enter = params["hours_to_enter"]
-  consultant = @@cons.find {|consultant| consultant.beeline_guid == beeline_guid}
+  consultant = @@consultants.find {|consultant| consultant.beeline_guid == beeline_guid}
 
-  beeline = Beeline.new()
-  begin
-    puts "impersonating #{beeline_guid}"
-    beeline.impersonate beeline_guid
-    beeline.enter_time week_ending_date, hours_to_enter.to_i
+  if @@config["submit_to_beeline"] == true then
+    beeline = Beeline.new()
+    begin
+      puts "impersonating #{beeline_guid}"
+      beeline.impersonate beeline_guid
+      beeline.enter_time @@projects[consultant.project], week_ending_date, hours_to_enter.to_i
+      consultant.time_submitted week_ending_date, hours_to_enter.to_i
+    rescue Exception => e
+      puts e.message
+      consultant.time_submitted week_ending_date, 0
+    ensure
+      beeline.stop_impersonating
+    end
+    beeline.close
+  else
     consultant.time_submitted week_ending_date, hours_to_enter.to_i
-  rescue Exception => e
-    puts e.message
-    consultant.time_submitted week_ending_date, 0
-  ensure
-    beeline.stop_impersonating
   end
-
-  beeline.close
   consultants_as_json
 end
 
@@ -138,7 +158,7 @@ post '/timecard/time_submitted' do
   beeline_guid = params["beeline_guid"]
   hours_to_enter = params["hours_to_enter"]
   puts "Entering #{hours_to_enter} hours for #{beeline_guid} for week #{week_ending_date}"
-  consultant = @@cons.find {|consultant| consultant.beeline_guid == beeline_guid}
+  consultant = @@consultants.find {|consultant| consultant.beeline_guid == beeline_guid}
   puts "Found #{consultant.last_name}"
 
   consultant.time_submitted week_ending_date, hours_to_enter.to_i
