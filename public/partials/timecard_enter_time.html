@@ -9,16 +9,18 @@
       <td>Enter Time</br><input type=checkbox ng-change="toggleEnterAll()" ng-model="enter_all"/></td>
       <td>Name</td>
       <td>GUID</td>
+        <th>Project</th>
       <td>Hours to Enter</td>
       <td>Remaining Hours Needed</td>
       <td>Hours Submitted</td>
       <th>State</th>
       <td></td>
     </tr>
-    <tr align="center" ng-repeat="consultant in consultants">
+    <tr align="center" ng-repeat="consultant in consultants" ng-hide="nothingToShow(consultant)">
       <td><input type=checkbox ng-model="consultant.enter_time"/></td>
       <td>{{consultant.last_name}}</td>
       <td>{{consultant.beeline_guid}}</td>
+        <td>{{consultant.project}}</td>
       <td ng-repeat="timecard in consultant.timecards | filter:week_ending">
         <input type=number ng-model="timecard.hours_to_enter"/></td>
       <td ng-repeat="timecard in consultant.timecards | filter:week_ending">{{consultant.hours_needed -

@@ -4,6 +4,7 @@ require 'json'
 require 'beeline'
 require 'beeline_timecard'
 require 'date'
+require 'parse_repository'
 
 require 'consultant'
 
@@ -53,12 +54,18 @@ end
               ]
 TEAMS
 
+@@parse_repository = ParseRepository.new
+
 get '/configuration' do
   JSON.fast_generate @@config
 end
 
 post '/configuration' do
   @@config = JSON.parse request.body.read
+
+  if @@config["mode"] == "Production" then
+    @@consultants = @@parse_repository.get_all_consultants @@config["parse_application_id"], @@config["parse_api_key"]
+  end
   JSON.fast_generate @@config
 end
 
@@ -67,6 +74,10 @@ post '/consultant' do
   puts new_consultant_as_hash
   new_consultant = Consultant.from_hash new_consultant_as_hash
   @@consultants << new_consultant
+
+  if (@@config["mode"] == "Production") then
+    @@parse_repository.save_new_consultant new_consultant, @@config["parse_application_id"], @@config["parse_api_key"]
+  end
 
   JSON.fast_generate new_consultant.to_hash
 end
@@ -109,6 +120,9 @@ post '/timecard/add' do
   @@consultants.each do |consultant|
     consultant.add_timecard week_ending_date
     consultants_as_hash << consultant.to_hash
+    if @@config["mode"] == "Production" then
+      @@parse_repository.update_consultant consultant, @@config["parse_application_id"], @@config["parse_api_key"]
+    end
   end
 
   consultants_as_json
@@ -142,13 +156,17 @@ post '/timecard/enter_time' do
       consultant.time_submitted week_ending_date, hours_to_enter.to_i
     rescue Exception => e
       puts e.message
-      consultant.time_submitted week_ending_date, 0
+      consultant.timecard_failed week_ending_date
     ensure
       beeline.stop_impersonating
     end
     beeline.close
   else
     consultant.time_submitted week_ending_date, hours_to_enter.to_i
+  end
+
+  if @@config["mode"] == "Production" then
+    @@parse_repository.update_consultant consultant, @@config["parse_application_id"], @@config["parse_api_key"]
   end
   consultants_as_json
 end
@@ -162,6 +180,9 @@ post '/timecard/time_submitted' do
   puts "Found #{consultant.last_name}"
 
   consultant.time_submitted week_ending_date, hours_to_enter.to_i
+  if @@config["mode"] == "Production" then
+    @@parse_repository.update_consultant consultant, @@config["parse_application_id"], @@config["parse_api_key"]
+  end
 
   consultants_as_json
 end

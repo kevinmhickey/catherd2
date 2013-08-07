@@ -34,6 +34,7 @@ function TimecardController($scope, $http) {
         console.log($scope.existing_timecards);
     });
 
+    $scope.entering_timecards = false;
 
     $scope.addTimecard = function(week_ending) {
         console.log("Adding timecard for week ending " + week_ending);
@@ -68,6 +69,12 @@ function TimecardController($scope, $http) {
         });
     }
 
+    $scope.nothingToShow = function(consultant) {
+        timecard = consultantTimecard(consultant, $scope.week_ending);
+
+        return ((consultant.hours_needed == 0) && (timecard.hours_to_enter == 0) && (timecard.hours_submitted == 0));
+    }
+
     function consultantTimecard(consultant, week_ending) {
         found_timecard = undefined;
         consultant.timecards.forEach(function(timecard) {
@@ -94,19 +101,45 @@ function TimecardController($scope, $http) {
                         timecard.hours_to_enter = timecard.hours_submitted > 0 ? 0 : timecard.hours_worked;
                     });
                 });
-
-                $scope.existing_timecards.push(week_ending);
-                console.log($scope.existing_timecards);
             });
     }
 
+    enterNextTime = function (times_to_enter) {
+        if (times_to_enter.length > 0) {
+            entry = times_to_enter.shift();
+            console.log("Entering time for " + entry["beeline_guid"]);
+            $http({
+                method: 'POST',
+                url: 'timecard/enter_time',
+                params: entry
+            }).success(function (consultants) {
+                    $scope.consultants = consultants;
+                    $scope.consultants.forEach(function (consultant) {
+                        consultant.timecards.forEach(function (timecard) {
+                            timecard.hours_to_enter = timecard.hours_submitted > 0 ? 0 : timecard.hours_worked;
+                        });
+                    });
+
+                    enterNextTime(times_to_enter);
+
+                });
+        }
+    }
+
     $scope.enterSelectedTimes = function() {
+        $scope.entering_timecards = true;
+        $scope.timecards_to_enter = [];
+        var week_ending = $scope.week_ending;
+
         $scope.consultants.forEach(function(consultant) {
             if (consultant.enter_time) {
                 var timecard = consultantTimecard(consultant, $scope.week_ending);
-                enterTime(consultant.beeline_guid, $scope.week_ending, timecard.hours_to_enter);
+                $scope.timecards_to_enter.push({"beeline_guid": consultant.beeline_guid, "week_ending": week_ending, "hours_to_enter": timecard.hours_to_enter});
             }
+
         });
+
+        enterNextTime($scope.timecards_to_enter);
     }
 }
 

@@ -1,8 +1,9 @@
 require File.dirname(__FILE__) + '/timecard'
 require 'date'
+require 'timecard'
 
 class Consultant
-  def initialize id, last_name, first_name, grade, beeline_guid, project_name, first_billable_date, rolloff_date
+  def initialize id, last_name, first_name, grade, beeline_guid, project_name, first_billable_date, rolloff_date, timecards = []
     @id = id
     @last_name = last_name
     @first_name = first_name
@@ -11,10 +12,12 @@ class Consultant
     @project = project_name
     @first_billable_date = first_billable_date
     @rolloff_date = rolloff_date
-    @timecards = []
+    @timecards = timecards
+    @parse_object_id = nil
   end
 
   attr_reader :id, :beeline_guid, :first_name, :last_name, :project, :grade, :first_billable_date, :rolloff_date, :timecards
+  attr_accessor :parse_object_id
 
   def timecard_end_dates
     end_dates = Set.new
@@ -34,6 +37,10 @@ class Consultant
 
   def time_submitted week_ending_date, hours_submitted
     @timecards.find {|timecard| timecard.week_ending_date == week_ending_date}.hours_submitted = hours_submitted
+  end
+
+  def timecard_failed week_ending_date
+    @timecards.find {|timecard| timecard.week_ending_date == week_ending_date}.submit_failed
   end
 
   def total_hours_needed
@@ -73,14 +80,29 @@ class Consultant
   end
 
   def self.from_hash consultant_hash
-    Consultant.new consultant_hash["id"],
+    timecards = []
+    if consultant_hash["timecards"] then
+      rolloff_date = Date.parse(consultant_hash["rolloff_date"])
+      first_billable_date = Date.parse(consultant_hash["first_billable_date"])
+      consultant_hash["timecards"].each do |timecard_hash|
+        timecard = Timecard.new(Date.parse(timecard_hash["week_ending"]), rolloff_date, first_billable_date)
+        if timecard_hash["hours_submitted"].to_i > 0 then
+          timecard.hours_submitted = timecard_hash["hours_submitted"]
+        end
+        timecards << timecard
+      end
+    end
+
+    consultant = Consultant.new consultant_hash["id"],
                    consultant_hash["last_name"],
                    consultant_hash["first_name"],
                    consultant_hash["grade"],
                    consultant_hash["beeline_guid"],
                    consultant_hash["project"],
                    Date.parse(consultant_hash["first_billable_date"]),
-                   Date.parse(consultant_hash["rolloff_date"])
+                   Date.parse(consultant_hash["rolloff_date"]),
+                   timecards
+    consultant.parse_object_id = consultant_hash["objectId"]
+    consultant
   end
-
 end
