@@ -1,24 +1,41 @@
 <div>
   <h2>{{consultant.first_name}} {{consultant.last_name}}</h2>
     <table>
-        <tr align="right"><th>First Billable Date</th><td>{{consultant.first_billable_date}}</td></tr>
-        <tr align="right"><th>Rolloff Date</th><td>{{consultant.rolloff_date}}</td></tr>
-        <tr align="right"><th>Grade</th><td>{{consultant.grade}}</td></tr>
-        <tr align="right"><th>Rate</th><td>{{rates[consultant.grade] | currency:"$"}}</td></tr>
-        <tr align="right"><th>Project</th><td>{{consultant.project}}</td></tr>
+        <tr align="right">
+            <th>First Billable Date</th>
+            <td>{{consultant.first_billable_date}}</td>
+        </tr>
+        <tr align="right">
+            <th>Rolloff Date</th>
+            <td>{{consultant.rolloff_date}}</td>
+        </tr>
+        <tr align="right">
+            <th>Grade</th>
+            <td>{{consultant.grade}}</td>
+        </tr>
+        <tr align="right">
+            <th>Rate</th>
+            <td>{{rates[consultant.grade] | currency:"$"}}</td>
+        </tr>
+        <tr align="right">
+            <th>Project</th>
+            <td>{{consultant.project}}</td>
+        </tr>
     </table>
     <br/>
-  <table>
-    <tr>
-      <th>Week Ending</th>
-      <th>Worked</th>
-      <th>Submitted</th>
-    </tr>
-    <tr ng-repeat="timecard in consultant.timecards">
-      <td>{{timecard.week_ending}}</td>
-      <td>{{timecard.hours_worked}}</td>
-      <td>{{timecard.hours_submitted}}</td>
-
-    </tr>
-  </table>
+    <table>
+        <tr>
+            <th>Week Ending</th>
+            <th>Worked</th>
+            <th>Submitted</th>
+        </tr>
+        <tr ng-repeat="timecard in consultant.timecards">
+            <td>{{timecard.week_ending}}</td>
+            <td>{{timecard.hours_worked}}</td>
+            <td ng-hide="edit==true">{{timecard.hours_submitted}}</td>
+            <td ng-show="edit==true"><input ng-model="timecard.hours_submitted"/></td>
+            <td ng-show="edit==true"><button ng-click="updateTimecard(timecard)">Update</button></td>
+        </tr>
+    </table>
+    <button ng-hide="edit==true" ng-click="edit = true">Edit</button>
 </div>

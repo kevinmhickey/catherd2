@@ -145,6 +145,7 @@ function TimecardController($scope, $http) {
 
 function TimecardDetailController($scope, $http, $routeParams) {
     $scope.beeline_guid = $routeParams.beeline_guid;
+    $scope.edit = false;
 
     $http.get("consultant/beeline_guid/" + $scope.beeline_guid).success(function(consultant) {
         $scope.consultant = consultant;
@@ -158,6 +159,17 @@ function TimecardDetailController($scope, $http, $routeParams) {
        $scope.rates = rates;
     });
 
+    $scope.saveConsultant = function() {
+        $scope.edit = false;
+    }
+
+    $scope.updateTimecard = function(timecard) {
+        $http({
+            method: 'POST',
+            url: '/timecard/time_submitted',
+            params: {"week_ending" : timecard.week_ending, "beeline_guid" : $scope.beeline_guid, "hours_to_enter" : timecard.hours_submitted}
+        });
+    }
 }
 
 function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
