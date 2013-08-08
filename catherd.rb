@@ -191,3 +191,8 @@ get '/rates' do
   content_type :json
   JSON.fast_generate @@rates
 end
+
+get '/projects' do
+  content_type :json
+  JSON.fast_generate @@projects
+end
