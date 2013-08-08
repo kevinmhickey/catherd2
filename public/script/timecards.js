@@ -226,12 +226,12 @@ function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
         $scope.table_headers.push("Rolloff Date")
         end_dates.forEach(function(end_date) {
             $scope.table_headers.push("Worked");
-            $scope.table_headers.push("Submitted");
+            $scope.table_headers.push("Beeline");
         });
         $scope.table_headers.push("Worked");
-        $scope.table_headers.push("Submitted");
-        $scope.table_headers.push("Full");
-        $scope.table_headers.push("Discounted");
+        $scope.table_headers.push("Beeline");
+        $scope.table_headers.push("Fees");
+//        $scope.table_headers.push("Discounted");
     };
 
     function buildTableLines(consultants, end_dates) {
@@ -258,7 +258,7 @@ function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
             consultant.total_fees = consultant.hours_submitted_month * $scope.rates[consultant.grade];
             line.push($filter('currency')(consultant.total_fees, "$"));
             consultant.total_fees_discount = consultant.total_fees * .91;
-            line.push($filter('currency')(consultant.total_fees_discount, "$"));
+//            line.push($filter('currency')(consultant.total_fees_discount, "$"));
             $scope.table_lines.push(line);
 
         });

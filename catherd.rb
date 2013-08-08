@@ -73,6 +73,11 @@ post '/consultant' do
   new_consultant_as_hash = JSON.parse request.body.read
   puts new_consultant_as_hash
   new_consultant = Consultant.from_hash new_consultant_as_hash
+
+  find_existing_timecards.each do |week_ending|
+    new_consultant.add_timecard week_ending
+  end
+
   @@consultants << new_consultant
 
   if (@@config["mode"] == "Production") then
@@ -128,8 +133,7 @@ post '/timecard/add' do
   consultants_as_json
 end
 
-get '/timecard/list_existing' do
-  content_type :json
+def find_existing_timecards
   existing_timecards = Set.new
 
   @@consultants.each do |consultant|
@@ -137,6 +141,12 @@ get '/timecard/list_existing' do
       existing_timecards.add end_date
     end
   end
+  existing_timecards
+end
+
+get '/timecard/list_existing' do
+  content_type :json
+  existing_timecards = find_existing_timecards()
 
   JSON.fast_generate existing_timecards.to_a
 end
