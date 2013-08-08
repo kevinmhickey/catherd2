@@ -222,30 +222,38 @@ function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
     function buildTableHeaders(end_dates) {
         $scope.table_headers = [];
         $scope.table_headers.push("Name");
+        $scope.table_headers.push("First Billable Date");
+        $scope.table_headers.push("Rolloff Date")
         end_dates.forEach(function(end_date) {
-            $scope.table_headers.push("Hours Worked " + end_date);
-            $scope.table_headers.push("Hours Submitted " + end_date);
+            $scope.table_headers.push("Worked");
+            $scope.table_headers.push("Submitted");
         });
-        $scope.table_headers.push("Total Hours Submitted");
-        $scope.table_headers.push("Fees");
-        $scope.table_headers.push("Fees With Discount");
+        $scope.table_headers.push("Worked");
+        $scope.table_headers.push("Submitted");
+        $scope.table_headers.push("Full");
+        $scope.table_headers.push("Discounted");
     };
 
     function buildTableLines(consultants, end_dates) {
         $scope.table_lines = [];
         consultants.forEach(function(consultant) {
             consultant.hours_submitted_month = 0;
+            consultant.hours_worked_month = 0;
             var line = [];
             line.push(consultant.first_name + " " + consultant.last_name);
+            line.push(consultant.first_billable_date);
+            line.push(consultant.rolloff_date);
             end_dates.forEach(function(end_date) {
                 consultant.timecards.forEach(function(timecard) {
                     if (timecard.week_ending == end_date) {
                         line.push(timecard.hours_worked);
                         line.push(timecard.hours_submitted);
                         consultant.hours_submitted_month += timecard.hours_submitted;
+                        consultant.hours_worked_month += timecard.hours_worked;
                     }
                 })
             });
+            line.push(consultant.hours_worked_month);
             line.push(consultant.hours_submitted_month);
             consultant.total_fees = consultant.hours_submitted_month * $scope.rates[consultant.grade];
             line.push($filter('currency')(consultant.total_fees, "$"));

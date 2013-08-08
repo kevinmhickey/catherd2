@@ -6,6 +6,7 @@
         <tr><th>Expenses (12% of Fees)</th><td>{{expenses | currency:$}}</td></tr>
     </table>
     <table>
+        <tr colspan="3"><th></th><th colspan="2" ng-repeat="end_date in end_dates_in_month">{{end_date}}</th><th colspan="2">Total</th><th colspan="2">Fees</th></tr>
         <tr><th ng-repeat="header in table_headers">{{header}}</th></tr>
         <tr ng-repeat="line in table_lines"><td ng-repeat="field in line">{{field}}</td></tr>
     </table>
