@@ -7,8 +7,10 @@
     </table>
     <table>
         <tr><th colspan="3"></th><th colspan="2" ng-repeat="end_date in end_dates_in_month">{{end_date}}</th><th colspan="2">Total</th><th colspan="2">Fees</th></tr>
-        <tr><th ng-repeat="header in table_headers">{{header}}</th></tr>
-        <tr ng-repeat="line in table_lines"><td ng-repeat="field in line">{{field}}</td></tr>
+        <tr><th ng-repeat="header in table_headers track by $index">{{header}}</th></tr>
+        <tr ng-repeat="line in table_lines track by $index">
+            <td ng-repeat="field in line track by $index">{{field}}</td>
+        </tr>
     </table>
 
 </div>
