@@ -230,7 +230,7 @@ function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
         });
         $scope.table_headers.push("Worked");
         $scope.table_headers.push("Beeline");
-        $scope.table_headers.push("Fees");
+        $scope.table_headers.push("");
 //        $scope.table_headers.push("Discounted");
     };
 
@@ -240,7 +240,7 @@ function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
             consultant.hours_submitted_month = 0;
             consultant.hours_worked_month = 0;
             var line = [];
-            line.push(consultant.first_name + " " + consultant.last_name);
+            line.push(consultant.last_name + ", " + consultant.first_name);
             line.push(consultant.first_billable_date);
             line.push(consultant.rolloff_date);
             end_dates.forEach(function(end_date) {
@@ -258,10 +258,13 @@ function TimecardMonthlyReportController($scope, $http, $routeParams, $filter) {
             consultant.total_fees = consultant.hours_submitted_month * $scope.rates[consultant.grade];
             line.push($filter('currency')(consultant.total_fees, "$"));
             consultant.total_fees_discount = consultant.total_fees * .91;
-//            line.push($filter('currency')(consultant.total_fees_discount, "$"));
-            $scope.table_lines.push(line);
 
+            if((consultant.hours_worked_month > 0) || (consultant.hours_submitted_month > 0)) {
+                $scope.table_lines.push(line);
+            }
         });
+
+        $scope.table_lines.sort();
     }
 
 }
