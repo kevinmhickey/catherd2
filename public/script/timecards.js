@@ -24,9 +24,11 @@ function TimecardController($scope, $http) {
                 timecard.hours_to_enter = timecard.hours_submitted > 0 ? 0 : timecard.hours_worked;
             });
         });
+
         console.log($scope.consultants);
 
-        $scope.week_ending = "2013-07-07";
+        $scope.week_ending = "2013-08-11";
+        $scope.weekEndingChanged($scope.week_ending);
     });
 
     $http.get("timecard/list_existing").success(function(existing_ending_dates) {
@@ -55,6 +57,12 @@ function TimecardController($scope, $http) {
             });
     }
 
+    $scope.weekEndingChanged = function(week_ending) {
+        $scope.consultants.forEach(function(consultant) {
+            consultant.selected_timecard = consultantTimecard(consultant, week_ending);
+        })
+    }
+
     $scope.timecardExists = function(week_ending) {
         if (week_ending != undefined && $scope.existing_timecards != undefined) {
             return $scope.existing_timecards.indexOf(week_ending) != -1;
@@ -65,23 +73,19 @@ function TimecardController($scope, $http) {
 
     $scope.toggleEnterAll = function() {
         $scope.consultants.forEach(function(consultant) {
-            consultant.enter_time = $scope.enter_all;
+            $scope.toggleEnterTime(consultant);
         });
     }
 
     $scope.nothingToShow = function(consultant) {
-        timecard = consultantTimecard(consultant, $scope.week_ending);
-
+        timecard = consultant.selected_timecard;
         return ((consultant.hours_needed == 0) && (timecard.hours_to_enter == 0) && (timecard.hours_submitted == 0));
     }
 
     function consultantTimecard(consultant, week_ending) {
         found_timecard = undefined;
         consultant.timecards.forEach(function(timecard) {
-            console.log(timecard);
-            console.log(week_ending);
            if (timecard.week_ending == week_ending) {
-               console.log("Match!");
                found_timecard = timecard;
            }
         });
@@ -89,22 +93,7 @@ function TimecardController($scope, $http) {
         return found_timecard;
     }
 
-    enterTime = function(guid, week_ending, hours_to_enter) {
-        $http({
-            method: 'POST',
-            url: 'timecard/enter_time',
-            params: {"week_ending": week_ending, "hours_to_enter" : hours_to_enter, "beeline_guid": guid}
-        }).success(function(consultants) {
-                $scope.consultants = consultants;
-                $scope.consultants.forEach(function(consultant) {
-                    consultant.timecards.forEach(function(timecard) {
-                        timecard.hours_to_enter = timecard.hours_submitted > 0 ? 0 : timecard.hours_worked;
-                    });
-                });
-            });
-    }
-
-    enterNextTime = function (times_to_enter) {
+   $scope.enterNextTime = function (times_to_enter) {
         if (times_to_enter.length > 0) {
             entry = times_to_enter.shift();
             console.log("Entering time for " + entry["beeline_guid"]);
@@ -112,17 +101,16 @@ function TimecardController($scope, $http) {
                 method: 'POST',
                 url: 'timecard/enter_time',
                 params: entry
-            }).success(function (consultants) {
-                    $scope.consultants = consultants;
-                    $scope.consultants.forEach(function (consultant) {
-                        consultant.timecards.forEach(function (timecard) {
-                            timecard.hours_to_enter = timecard.hours_submitted > 0 ? 0 : timecard.hours_worked;
-                        });
+            }).success(function (timecard) {
+                    $scope.consultants.forEach(function(consultant) {
+                        if(consultant.beeline_guid == entry.beeline_guid) {
+                            consultant.selected_timecard.state = timecard.state;
+                        }
                     });
-
-                    enterNextTime(times_to_enter);
-
+                    $scope.enterNextTime(times_to_enter);
                 });
+        } else {
+            $scope.entering_timecards = false;
         }
     }
 
@@ -133,13 +121,27 @@ function TimecardController($scope, $http) {
 
         $scope.consultants.forEach(function(consultant) {
             if (consultant.enter_time) {
-                var timecard = consultantTimecard(consultant, $scope.week_ending);
+                consultant.enter_time = false;
+                var timecard = consultant.selected_timecard;
+                timecard.state = "SUBMITTING";
                 $scope.timecards_to_enter.push({"beeline_guid": consultant.beeline_guid, "week_ending": week_ending, "hours_to_enter": timecard.hours_to_enter});
             }
 
         });
 
-        enterNextTime($scope.timecards_to_enter);
+        $scope.enterNextTime($scope.timecards_to_enter);
+    }
+
+    $scope.toggleEnterTime = function(consultant) {
+        if (!$scope.entering_timecards) {
+            consultant.enter_time = !consultant.enter_time;
+            if (consultant.enter_time) {
+                consultant.selected_timecard.original_state = consultant.selected_timecard.state;
+                consultant.selected_timecard.state = "SELECTED";
+            } else {
+                consultant.selected_timecard.state = consultant.selected_timecard.original_state;
+            }
+        }
     }
 }
 

@@ -39,3 +39,23 @@ td {
 tr.even {
     background-color: #DDE0B6;
 }
+
+tr.FAILED {
+    background-color: lightcoral;
+}
+
+tr.UNSUBMITTED {
+    background-color: whitesmoke;
+}
+
+tr.SUBMITTED {
+    background-color: lightgreen;
+}
+
+tr.SUBMITTING {
+    background-color: lightblue;
+}
+
+tr.SELECTED {
+    background-color: lightblue;
+}

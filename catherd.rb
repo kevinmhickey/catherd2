@@ -17,7 +17,6 @@ require 'consultant'
               ]
 CONSULTANTS
 
-@@consultants = []
 
 @@rates = {"consultant" => 157.50,
            "senior" => 168.75,
@@ -44,7 +43,7 @@ end
 @@config = {"mode" => "Development",
             "parse_application_id" => "WjDbcDcAfMJUPk01nfIZAP85skoEZGFGBKjuPsW3",
             "parse_api_key" => "Gr450bHB3lPuURvSaraBOVTlO4ovBiSiIXOlhUzd",
-            "submit_to_beeline" => true
+            "submit_to_beeline" => false
 }
 
 @@teams = <<TEAMS
@@ -55,6 +54,8 @@ end
 TEAMS
 
 @@parse_repository = ParseRepository.new
+
+@@consultants = @@parse_repository.get_all_consultants @@config["parse_application_id"], @@config["parse_api_key"]
 
 get '/configuration' do
   JSON.fast_generate @@config
@@ -156,6 +157,7 @@ post '/timecard/enter_time' do
   beeline_guid = params["beeline_guid"]
   hours_to_enter = params["hours_to_enter"]
   consultant = @@consultants.find {|consultant| consultant.beeline_guid == beeline_guid}
+  timecard = consultant.find_timecard week_ending_date
 
   if @@config["submit_to_beeline"] == true then
     beeline = Beeline.new()
@@ -163,22 +165,24 @@ post '/timecard/enter_time' do
       puts "impersonating #{beeline_guid}"
       beeline.impersonate beeline_guid
       beeline.enter_time @@projects[consultant.project], week_ending_date, hours_to_enter.to_i
-      consultant.time_submitted week_ending_date, hours_to_enter.to_i
+      timecard.hours_submitted = hours_to_enter.to_i
     rescue Exception => e
       puts e.message
-      consultant.timecard_failed week_ending_date
+      timecard.submit_failed
     ensure
       beeline.stop_impersonating
     end
     beeline.close
   else
-    consultant.time_submitted week_ending_date, hours_to_enter.to_i
+    sleep 3
+    timecard.hours_submitted = hours_to_enter.to_i
   end
 
   if @@config["mode"] == "Production" then
     @@parse_repository.update_consultant consultant, @@config["parse_application_id"], @@config["parse_api_key"]
   end
-  consultants_as_json
+
+  JSON.fast_generate timecard.to_hash
 end
 
 post '/timecard/time_submitted' do

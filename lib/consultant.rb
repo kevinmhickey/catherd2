@@ -35,12 +35,20 @@ class Consultant
     @timecards << Timecard.new(week_ending_date, @rolloff_date, @first_billable_date)
   end
 
+  def find_timecard week_ending_date
+    @timecards.find {|timecard| timecard.week_ending_date == week_ending_date}
+  end
+
   def time_submitted week_ending_date, hours_submitted
     @timecards.find {|timecard| timecard.week_ending_date == week_ending_date}.hours_submitted = hours_submitted
   end
 
   def timecard_failed week_ending_date
     @timecards.find {|timecard| timecard.week_ending_date == week_ending_date}.submit_failed
+  end
+
+  def timecard_state week_ending_date
+    @timecards.find {|timecard| timecard.week_ending_date == week_ending_date}.state
   end
 
   def total_hours_needed
