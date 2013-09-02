@@ -4,8 +4,7 @@
                                                               ng-change="weekEndingChanged(week_ending)"/>
     <button ng-click="addTimecard(week_ending)" ng-hide="timecardExists(week_ending)">Add Timecard</button>
     <hr/>
-    <button ng-click="enterSelectedTimes()" ng-disabled="entering_timecards">Enter Selected Times</button>
-    <button ng-click="toggleEnterAll()" ng-disabled="entering_timecards">Select All</button>
+    <button ng-show="timecardExists(week_ending)" ng-click="submitTimecards()" ng-disabled="submitting">Submit Timecards</button>
     <table ng-show="timecardExists(week_ending)">
         <tr align="center">
             <th>Name</th>
@@ -17,18 +16,16 @@
             <th>State</th>
             <th></th>
         </tr>
-        <tr ng-class=consultant.selected_timecard.state align="center" ng-repeat="consultant in consultants | orderBy:'last_name'"
-            ng-hide="nothingToShow(consultant)">
-            <!--<td ><input ng-disabled="entering_timecards" type=checkbox ng-model="consultant.enter_time"/></td>-->
-            <td ng-click="toggleEnterTime(consultant)">{{consultant.last_name}}, {{consultant.first_name}}</td>
-            <td ng-click="toggleEnterTime(consultant)">{{consultant.beeline_guid}}</td>
-            <td ng-click="toggleEnterTime(consultant)">{{consultant.project}}</td>
+        <tr ng-repeat="timecard in timecards | orderBy: 'last_name'" ng-class="timecard.state">
+            <td ng-click="toggleSelected(timecard)">{{timecard.first_name}} {{timecard.last_name}}</td>
+            <td ng-click="toggleSelected(timecard)">{{timecard.beeline_guid}}</td>
+            <td ng-click="toggleSelected(timecard)">{{timecard.project}}</td>
             <td>
-                <input type=number max=80 maxlength=2 style="width: 36px;" ng-model="consultant.selected_timecard.hours_to_enter"/>
+                <input type=number max=80 maxlength=2 style="width: 36px;" ng-model="timecard.hours_to_enter"/>
             </td>
-            <td ng-click="toggleEnterTime(consultant)">{{consultant.hours_needed - consultant.selected_timecard.hours_to_enter}}</td>
-            <td ng-click="toggleEnterTime(consultant)">{{consultant.selected_timecard.hours_submitted}}</td>
-            <td ng-click="toggleEnterTime(consultant)">{{consultant.selected_timecard.state}}</td>
+            <td ng-click="toggleSelected(timecard)">{{timecard.hours_needed - timecard.hours_to_enter}}</td>
+            <td ng-click="toggleSelected(timecard)">{{timecard.hours_submitted}}</td>
+            <td ng-click="toggleSelected(timecard)">{{timecard.state}}</td>
         </tr>
     </table>
 </div>

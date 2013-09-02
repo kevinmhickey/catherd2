@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) 
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__)))
 
 require "selenium-webdriver"
 require 'beeline_timecard'
@@ -35,6 +35,23 @@ class Beeline
         t.select week_ending_date
         t.enter_time ebs_number, hours_per_day
         t.submit
+    end
+
+    def submit timecard, week_ending_date, beeline_guid, hours_to_enter, project
+      result = {}
+      begin
+        impersonate beeline_guid
+        enter_time project, week_ending_date, hours_to_enter.to_i
+        timecard.hours_submitted = hours_to_enter.to_i
+        #result[:hours_submitted] = hours_to_enter
+        #result[:state] = :SUBMITTED
+      rescue Exception => e
+        #result[:hours_submitted] = 0
+        #result[:state] = :FAILED
+        timecard.submit_failed
+      ensure
+        stop_impersonating
+      end
     end
 
     def close

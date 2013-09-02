@@ -40,22 +40,22 @@ tr.even {
     background-color: #DDE0B6;
 }
 
-tr.FAILED {
+.FAILED {
     background-color: lightcoral;
 }
 
-tr.UNSUBMITTED {
+.UNSUBMITTED {
     background-color: whitesmoke;
 }
 
-tr.SUBMITTED {
+.SUBMITTED {
     background-color: lightgreen;
 }
 
-tr.SUBMITTING {
+.SUBMITTING {
     background-color: lightblue;
 }
 
-tr.SELECTED {
+.SELECTED {
     background-color: lightblue;
 }

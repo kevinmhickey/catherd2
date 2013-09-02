@@ -8,6 +8,7 @@ class Timecard
   end
 
   attr_reader :week_ending_date, :state, :hours_submitted
+  attr_writer :state, :hours_submitted
 
   def working_on? day, rolloff_date, start_date
     return day <= rolloff_date && day >= start_date

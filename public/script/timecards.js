@@ -16,51 +16,67 @@ function TimecardSummaryController($scope, $http) {
     });
 };
 
-function TimecardController($scope, $http) {
-    $http.get("consultants/list").success(function(consultants) {
-        $scope.consultants = consultants;
-        $scope.consultants.forEach(function(consultant) {
-            consultant.timecards.forEach(function(timecard) {
-                timecard.hours_to_enter = timecard.hours_submitted > 0 ? 0 : timecard.hours_worked;
-            });
-        });
-
-        console.log($scope.consultants);
-
-        $scope.week_ending = "2013-08-11";
-        $scope.weekEndingChanged($scope.week_ending);
-    });
-
+function TimecardController($scope, $http, $timeout) {
     $http.get("timecard/list_existing").success(function(existing_ending_dates) {
         $scope.existing_timecards = existing_ending_dates;
         console.log($scope.existing_timecards);
+
+        $scope.week_ending = $scope.existing_timecards[$scope.existing_timecards.length - 1];
+        $scope.getTimecardsForWeekEnding();
     });
 
-    $scope.entering_timecards = false;
 
-    $scope.addTimecard = function(week_ending) {
-        console.log("Adding timecard for week ending " + week_ending);
+    $scope.getTimecardsForWeekEnding = function() {
+        $http.get("timecard/for_week_ending/" + $scope.week_ending).success(function(result) {
+            $scope.timecards = result["timecards"];
+            $scope.submitting = result["submitting"];
+
+            if ($scope.submitting) {
+                $timeout($scope.getTimecardsForWeekEnding, 2000);
+            }
+        });
+    }
+
+    $scope.toggleSelected = function(timecard) {
+        if(!$scope.submitting) {
+            if(timecard.state == "SELECTED") {
+                timecard.state = timecard.original_state;
+            } else {
+                timecard.original_state = timecard.state;
+                timecard.state = "SELECTED";
+            }
+        }
+    }
+
+    function prepareTimecardRequest(week_ending_date, timecards) {
+        var request = {};
+        request["week_ending_date"] = week_ending_date;
+        request["timecards"] = {}
+
+        timecards.forEach(function(timecard) {
+            if (timecard.state == "SELECTED") {
+                request["timecards"][timecard.beeline_guid] = timecard.hours_to_enter;
+            }
+        });
+
+        return request;
+    }
+
+    $scope.submitTimecards = function() {
         $http({
-            method: 'POST',
-            url: 'timecard/add',
-            params: {"week_ending_date" : week_ending}
-        }).success(function(consultants) {
-                $scope.consultants = consultants;
-                $scope.consultants.forEach(function(consultant) {
-                    consultant.timecards.forEach(function(timecard) {
-                        timecard.hours_to_enter = timecard.hours_submitted > 0 ? 0 : timecard.hours_worked;
-                    });
-                });
+             method: 'POST',
+             url: 'timecard/submit',
+             data: JSON.stringify(prepareTimecardRequest($scope.week_ending, $scope.timecards))
+        })
 
-                $scope.existing_timecards.push(week_ending);
-                console.log($scope.existing_timecards);
-            });
+        $timeout($scope.getTimecardsForWeekEnding, 300);
     }
 
     $scope.weekEndingChanged = function(week_ending) {
-        $scope.consultants.forEach(function(consultant) {
-            consultant.selected_timecard = consultantTimecard(consultant, week_ending);
-        })
+        $scope.week_ending = week_ending;
+        if($scope.timecardExists(week_ending)) {
+            $scope.getTimecardsForWeekEnding();
+        }
     }
 
     $scope.timecardExists = function(week_ending) {
@@ -71,78 +87,7 @@ function TimecardController($scope, $http) {
         }
     }
 
-    $scope.toggleEnterAll = function() {
-        $scope.consultants.forEach(function(consultant) {
-            $scope.toggleEnterTime(consultant);
-        });
-    }
 
-    $scope.nothingToShow = function(consultant) {
-        timecard = consultant.selected_timecard;
-        return ((consultant.hours_needed == 0) && (timecard.hours_to_enter == 0) && (timecard.hours_submitted == 0));
-    }
-
-    function consultantTimecard(consultant, week_ending) {
-        found_timecard = undefined;
-        consultant.timecards.forEach(function(timecard) {
-           if (timecard.week_ending == week_ending) {
-               found_timecard = timecard;
-           }
-        });
-
-        return found_timecard;
-    }
-
-   $scope.enterNextTime = function (times_to_enter) {
-        if (times_to_enter.length > 0) {
-            entry = times_to_enter.shift();
-            console.log("Entering time for " + entry["beeline_guid"]);
-            $http({
-                method: 'POST',
-                url: 'timecard/enter_time',
-                params: entry
-            }).success(function (timecard) {
-                    $scope.consultants.forEach(function(consultant) {
-                        if(consultant.beeline_guid == entry.beeline_guid) {
-                            consultant.selected_timecard.state = timecard.state;
-                        }
-                    });
-                    $scope.enterNextTime(times_to_enter);
-                });
-        } else {
-            $scope.entering_timecards = false;
-        }
-    }
-
-    $scope.enterSelectedTimes = function() {
-        $scope.entering_timecards = true;
-        $scope.timecards_to_enter = [];
-        var week_ending = $scope.week_ending;
-
-        $scope.consultants.forEach(function(consultant) {
-            if (consultant.enter_time) {
-                consultant.enter_time = false;
-                var timecard = consultant.selected_timecard;
-                timecard.state = "SUBMITTING";
-                $scope.timecards_to_enter.push({"beeline_guid": consultant.beeline_guid, "week_ending": week_ending, "hours_to_enter": timecard.hours_to_enter});
-            }
-
-        });
-
-        $scope.enterNextTime($scope.timecards_to_enter);
-    }
-
-    $scope.toggleEnterTime = function(consultant) {
-        if (!$scope.entering_timecards) {
-            consultant.enter_time = !consultant.enter_time;
-            if (consultant.enter_time) {
-                consultant.selected_timecard.original_state = consultant.selected_timecard.state;
-                consultant.selected_timecard.state = "SELECTED";
-            } else {
-                consultant.selected_timecard.state = consultant.selected_timecard.original_state;
-            }
-        }
-    }
 }
 
 function TimecardDetailController($scope, $http, $routeParams) {

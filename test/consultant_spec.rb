@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__)) + '../lib')
 
 require 'rspec'
-require File.dirname(__FILE__) + '/../lib/consultant'
+require '../lib/consultant'
 require 'json'
 
 describe 'Safe behavior' do
@@ -131,7 +131,78 @@ describe 'Initializing from hash' do
 
   it 'should add an empty array for timecards if none are present' do
     @consultant = Consultant.from_hash @hash
-    @consultant.timecards.should eq([])
+    @consultant.timecards.should eq({})
   end
 
+end
+
+describe 'Timecard for entry' do
+  before :each do
+    @first_billable_date = Date.new(2012, 8, 1)
+    @rolloff_date = Date.new(2013, 12, 31)
+    @beeline_guid = "12345678"
+    @consultant = Consultant.new "khickey", "Hickey", "Kevin", "lead", @beeline_guid, "FAR117", @first_billable_date, @rolloff_date
+  end
+
+  it 'should generate a timecard hash for a week ending date for which a timecard exists' do
+    week_ending_date = Date.new(2013, 8, 25)
+    @consultant.add_timecard(week_ending_date)
+    expected = {"first_name" => "Kevin", "last_name" => "Hickey", "beeline_guid" => @beeline_guid, "project" => "FAR117", "hours_to_enter" => 40, "hours_needed" => 40, "hours_submitted" => 0, "state" => :UNSUBMITTED}
+
+    @consultant.timecard_for_entry(week_ending_date).should eq(expected)
+  end
+
+  it 'should raise an exception for a week ending date that does not exist' do
+    week_ending_date = Date.new(2013, 8, 25)
+    expect { @consultant.timecard_for_entry(week_ending_date) }.to raise_error("Timecard does not exist")
+  end
+
+  it 'should generate a nil response for a timecard after the week containing the rolloff date' do
+    week_ending_date = Date.new(2014, 01, 12)
+    @consultant.add_timecard(week_ending_date)
+
+    @consultant.timecard_for_entry(week_ending_date).should eq(nil)
+  end
+
+  it 'should generate a timecard hash for the week ending containing the rolloff date' do
+    week_ending_date = Date.new(2014, 01, 05)
+    @consultant.add_timecard(week_ending_date)
+    expected = {"first_name" => "Kevin", "last_name" => "Hickey", "beeline_guid" => @beeline_guid, "project" => "FAR117", "hours_to_enter" => 16, "hours_needed" => 16, "hours_submitted" => 0, "state" => :UNSUBMITTED}
+
+    @consultant.timecard_for_entry(week_ending_date).should eq(expected)
+  end
+
+end
+
+describe 'Hours to enter calculation' do
+  before :each do
+    @first_billable_date = Date.new(2012, 8, 1)
+    @rolloff_date = Date.new(2013, 12, 31)
+    @beeline_guid = "12345678"
+    @consultant = Consultant.new "khickey", "Hickey", "Kevin", "lead", @beeline_guid, "FAR117", @first_billable_date, @rolloff_date
+  end
+
+  it 'should be 0 if the timecard state is SUBMITTED' do
+    week_ending_date = Date.new(2013, 8, 25)
+    @consultant.add_timecard week_ending_date
+    @consultant.time_submitted week_ending_date, 40
+
+    @consultant.timecard_for_entry(week_ending_date)["hours_to_enter"].should eq(0)
+  end
+
+  it 'should be the total hours needed for a normal week' do
+    week_ending_date = Date.new(2013, 8, 25)
+    @consultant.add_timecard week_ending_date
+
+    @consultant.timecard_for_entry(week_ending_date)["hours_to_enter"].should eq(@consultant.total_hours_needed)
+  end
+
+  it 'should limit to 80 hours if more than 80 are needed' do
+    week_ending_date = Date.new(2013, 9, 8)
+    @consultant.add_timecard Date.new(2013, 8, 25)
+    @consultant.add_timecard Date.new(2013, 9, 1)
+    @consultant.add_timecard week_ending_date
+
+    @consultant.timecard_for_entry(week_ending_date)["hours_to_enter"].should eq(80)
+  end
 end
