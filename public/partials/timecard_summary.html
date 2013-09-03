@@ -13,7 +13,7 @@
             <th>Total Hours Submitted</th>
             <th>Unsubmitted Hours</th>
         </tr>
-        <tr ng-repeat="consultant in consultants">
+        <tr ng-repeat="consultant in consultants | orderBy: 'rolloff_date'">
             <td>{{consultant.id}}</td>
             <td>{{consultant.last_name}}</td>
             <td>{{consultant.first_name}}</td>

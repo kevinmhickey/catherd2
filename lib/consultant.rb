@@ -115,9 +115,8 @@ class Consultant
       consultant_hash["timecards"].each do |timecard_hash|
         week_ending_date = Date.parse(timecard_hash["week_ending"])
         timecard = Timecard.new(week_ending_date, rolloff_date, first_billable_date)
-        if timecard_hash["hours_submitted"].to_i > 0 then
-          timecard.hours_submitted = timecard_hash["hours_submitted"]
-        end
+        timecard.hours_submitted = timecard_hash["hours_submitted"]
+        timecard.state = timecard_hash["state"]
         timecards[week_ending_date] = timecard
       end
     end

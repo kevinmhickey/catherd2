@@ -1,41 +1,71 @@
 <div>
-  <h2>{{consultant.first_name}} {{consultant.last_name}}</h2>
-    <table>
-        <tr align="right">
-            <th>First Billable Date</th>
-            <td>{{consultant.first_billable_date}}</td>
-        </tr>
-        <tr align="right">
-            <th>Rolloff Date</th>
-            <td>{{consultant.rolloff_date}}</td>
-        </tr>
-        <tr align="right">
-            <th>Grade</th>
-            <td>{{consultant.grade}}</td>
-        </tr>
-        <tr align="right">
-            <th>Rate</th>
-            <td>{{rates[consultant.grade] | currency:"$"}}</td>
-        </tr>
-        <tr align="right">
-            <th>Project</th>
-            <td>{{consultant.project}}</td>
-        </tr>
-    </table>
-    <br/>
-    <table>
-        <tr>
-            <th>Week Ending</th>
-            <th>Worked</th>
-            <th>Submitted</th>
-        </tr>
-        <tr ng-repeat="timecard in consultant.timecards">
-            <td>{{timecard.week_ending}}</td>
-            <td>{{timecard.hours_worked}}</td>
-            <td ng-hide="edit==true">{{timecard.hours_submitted}}</td>
-            <td ng-show="edit==true"><input ng-model="timecard.hours_submitted"/></td>
-            <td ng-show="edit==true"><button ng-click="updateTimecard(timecard)">Update</button></td>
-        </tr>
-    </table>
+    <h2>{{consultant.first_name}} {{consultant.last_name}}</h2>
+    <div>
+        <table>
+            <tr align="right">
+                <th>First Billable Date</th>
+                <td ng-hide="edit">{{consultant.first_billable_date}}</td>
+                <td ng-show="edit"><input type="date" ng-model="consultant.first_billable_date"/></td>
+            </tr>
+            <tr align="right">
+                <th>Rolloff Date</th>
+                <td ng-hide="edit">{{consultant.rolloff_date}}</td>
+                <td ng-show="edit"><input type="date" ng-model="consultant.rolloff_date"/></td>
+            </tr>
+            <tr align="right">
+                <th>Grade</th>
+                <td ng-hide="edit">{{consultant.grade}}</td>
+                <td ng-show="edit">
+                    <select ng-model="consultant.grade">
+                        <option>consultant</option>
+                        <option>senior</option>
+                        <option>lead</option>
+                        <option>principal</option>
+                    </select>
+                </td>
+            </tr>
+            <tr align="right">
+                <th>Rate</th>
+                <td>{{rates[consultant.grade] | currency:"$"}}</td>
+            </tr>
+            <tr align="right">
+                <th>Project</th>
+                <td ng-hide="edit">{{consultant.project}}</td>
+                <td ng-show="edit">
+                    <select ng-model="consultant.project">
+                        <option>00686202001</option>
+                        <option>00684057001</option>
+                        <option>00686200001</option>
+                        <option>00686191001</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <table>
+            <tr>
+                <th>Week Ending</th>
+                <th>Worked</th>
+                <th>Submitted</th>
+            </tr>
+            <tr ng-repeat="timecard in consultant.timecards" ng-class="timecard.state">
+                <td>{{timecard.week_ending}}</td>
+                <td>{{timecard.hours_worked}}</td>
+                <td ng-hide="edit==true">{{timecard.hours_submitted}}</td>
+                <td ng-show="edit==true"><input type=number max=80 maxlength=2 style="width: 36px;" ng-disabled="submitting" ng-model="timecard.hours_submitted"/></td>
+
+                <td ng-hide="edit==true">{{timecard.state}}</td>
+                <td ng-show="edit==true">
+                    <select ng-model="timecard.state">
+                        <option>UNSUBMITTED</option>
+                        <option>SUBMITTED</option>
+                        <option>FAILED</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
     <button ng-hide="edit==true" ng-click="edit = true">Edit</button>
+    <button ng-show="edit" ng-click="edit = false">Cancel</button>
+    <button ng-show="edit" ng-click="updateConsultant(consultant)">Save</button>
 </div>

@@ -1,8 +1,14 @@
 <div>
     <h2>Enter Time</h2></p>
-    <label>Week Ending <i>Hint: Pick Sunday</i></label><input type="date" ng-model="week_ending"
-                                                              ng-change="weekEndingChanged(week_ending)"/>
-    <button ng-click="addTimecard(week_ending)" ng-hide="timecardExists(week_ending)">Add Timecard</button>
+    <label>Week Ending</label>
+    <select ng-model="week_ending" ng-change="weekEndingChanged(week_ending)">
+        <option ng-repeat="week_ending in existing_timecards">{{week_ending}}</option>
+        <option>Add New...</option>
+    </select>
+    <div ng-show="week_ending == 'Add New...'">
+        <label>Week Ending for New Timecard</label><input type="date" ng-model="add_new_week_ending"/>
+        <button ng-click="addTimecard(add_new_week_ending)">Add Timecard</button>
+    </div>
     <hr/>
     <button ng-show="timecardExists(week_ending)" ng-click="submitTimecards()" ng-disabled="submitting">Submit Timecards</button>
     <table ng-show="timecardExists(week_ending)">
@@ -21,7 +27,7 @@
             <td ng-click="toggleSelected(timecard)">{{timecard.beeline_guid}}</td>
             <td ng-click="toggleSelected(timecard)">{{timecard.project}}</td>
             <td>
-                <input type=number max=80 maxlength=2 style="width: 36px;" ng-model="timecard.hours_to_enter"/>
+                <input type=number max=80 maxlength=2 style="width: 36px;" ng-disabled="submitting" ng-model="timecard.hours_to_enter"/>
             </td>
             <td ng-click="toggleSelected(timecard)">{{timecard.hours_needed - timecard.hours_to_enter}}</td>
             <td ng-click="toggleSelected(timecard)">{{timecard.hours_submitted}}</td>

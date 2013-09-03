@@ -47,8 +47,11 @@ end
 TEAMS
 
 @@repository = ParseRepository.new @@config["parse_application_id"], @@config["parse_api_key"]
-
 @@herd = Herd.new @@repository
+
+@@repository = DummyRepository.new @@herd.consultants
+@@herd = Herd.new @@repository
+
 @@consultants = @@repository.get_all_consultants.values
 #@@consultants.each {|consultant| @@herd.add consultant}
 
@@ -88,7 +91,15 @@ end
 #end
 
 get '/consultant/beeline_guid/:beeline_guid' do
-  JSON.fast_generate @@consultants.find {|consultant| consultant.beeline_guid == params[:beeline_guid]}.to_hash
+  JSON.fast_generate @@herd.get(params[:beeline_guid]).to_hash
+end
+
+put '/consultant/beeline_guid/:beeline_guid' do
+  consultant_hash = JSON.parse request.body.read
+  consultant = Consultant.from_hash consultant_hash
+  @@herd.update consultant
+
+  JSON.fast_generate consultant.to_hash
 end
 
 get '/consultants/list' do
@@ -100,53 +111,16 @@ get '/consultant/detail' do
   erb :consultant_detail
 end
 
-#get '/teams' do
-#  erb :edit_teams
-#end
-#
-#get '/teams/list' do
-#  content_type :json
-#  @@teams
-#end
-#
-#post '/teams/save_all' do
-#  content_type :json
-#  puts params[:teams]
-#  @@teams = params[:teams]
-#end
-#
-#get '/assign' do
-#  erb :assign_teams
-#end
-#
-post '/timecard/add' do
-  week_ending_date = Date.strptime request[:week_ending_date], '%Y-%m-%d'
-  consultants_as_hash = []
-  @@consultants.each do |consultant|
-    consultant.add_timecard week_ending_date
-    consultants_as_hash << consultant.to_hash
-    if @@config["mode"] == "Production" then
-      #@@repository.update_consultant consultant, @@config["parse_application_id"], @@config["parse_api_key"]
-    end
-  end
+post '/timecard/add/:week_ending' do
+  week_ending_date = Date.strptime params[:week_ending], '%Y-%m-%d'
+  @@herd.add_timecard week_ending_date
 
-  consultants_as_json
-end
-
-def find_existing_timecards
-  existing_timecards = Set.new
-
-  @@consultants.each do |consultant|
-    consultant.timecard_end_dates.each do |end_date|
-      existing_timecards.add end_date
-    end
-  end
-  existing_timecards
+  JSON.fast_generate @@herd.find_existing_timecards.to_a
 end
 
 get '/timecard/list_existing' do
   content_type :json
-  existing_timecards = find_existing_timecards()
+  existing_timecards = @@herd.find_existing_timecards
 
   JSON.fast_generate existing_timecards.to_a
 end
@@ -173,39 +147,6 @@ get '/timecard/for_week_ending/:week_ending' do
   result = {"submitting" => @@herd.submitting, "timecards" => timecards}
 
   JSON.fast_generate result
-end
-
-post '/timecard/enter_time' do
-  week_ending_date = Date.strptime params["week_ending"], '%Y-%m-%d'
-  beeline_guid = params["beeline_guid"]
-  hours_to_enter = params["hours_to_enter"]
-  consultant = @@consultants.find {|consultant| consultant.beeline_guid == beeline_guid}
-  timecard = consultant.find_timecard week_ending_date
-
-  if @@config["submit_to_beeline"] == true then
-    beeline = Beeline.new()
-    begin
-      puts "impersonating #{beeline_guid}"
-      beeline.impersonate beeline_guid
-      beeline.enter_time @@projects[consultant.project], week_ending_date, hours_to_enter.to_i
-      timecard.hours_submitted = hours_to_enter.to_i
-    rescue Exception => e
-      puts e.message
-      timecard.submit_failed
-    ensure
-      beeline.stop_impersonating
-    end
-    beeline.close
-  else
-    sleep 3
-    timecard.hours_submitted = hours_to_enter.to_i
-  end
-
-  if @@config["mode"] == "Production" then
-    #@@repository.update_consultant consultant, @@config["parse_application_id"], @@config["parse_api_key"]
-  end
-
-  JSON.fast_generate timecard.to_hash
 end
 
 post '/timecard/time_submitted' do

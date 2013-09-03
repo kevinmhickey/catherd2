@@ -12,6 +12,15 @@ class Herd
     @consultants[consultant.beeline_guid] = consultant
   end
 
+  def update consultant
+    @consultants[consultant.beeline_guid] = consultant
+    @repository.update_consultant consultant
+  end
+
+  def get beeline_guid
+    @consultants[beeline_guid]
+  end
+
   def mark_as_submitting week_ending_date, beeline_guids
     beeline_guids.each do |beeline_guid|
       @consultants[beeline_guid].timecards[week_ending_date].state = :SUBMITTING
@@ -38,6 +47,24 @@ class Herd
     end
 
     timecards
+  end
+
+  def add_timecard week_ending_date
+    @consultants.values.each do |consultant|
+      consultant.add_timecard week_ending_date
+      @repository.update_consultant consultant
+    end
+  end
+
+  def find_existing_timecards
+    existing_timecards = Set.new
+
+    @consultants.values.each do |consultant|
+      consultant.timecard_end_dates.each do |end_date|
+        existing_timecards.add end_date
+      end
+    end
+    existing_timecards
   end
 
 end

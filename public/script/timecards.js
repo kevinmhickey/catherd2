@@ -6,7 +6,7 @@ angular.module('Timecards', []).
             when('/detail/:beeline_guid', {templateUrl: 'partials/timecard_detail.html', controller: TimecardDetailController}).
             when('/monthly_report/:month/:year', {templateUrl: 'partials/timecard_monthly_report.html', controller: TimecardMonthlyReportController}).
             when('/configuration', {templateUrl: 'partials/timecard_configuration.html', controller: TimecardConfigurationController}).
-            when('/monthly_report', {redirectTo: '/monthly_report/07/2013'}).
+            when('/monthly_report', {redirectTo: '/monthly_report/08/2013'}).
             otherwise({redirectTo: '/timecards'});
     }]);
 
@@ -22,6 +22,7 @@ function TimecardController($scope, $http, $timeout) {
         console.log($scope.existing_timecards);
 
         $scope.week_ending = $scope.existing_timecards[$scope.existing_timecards.length - 1];
+        $scope.add_new_week_ending = $scope.week_ending + 7;
         $scope.getTimecardsForWeekEnding();
     });
 
@@ -69,7 +70,8 @@ function TimecardController($scope, $http, $timeout) {
              data: JSON.stringify(prepareTimecardRequest($scope.week_ending, $scope.timecards))
         })
 
-        $timeout($scope.getTimecardsForWeekEnding, 300);
+        $scope.submitting = true
+        $timeout($scope.getTimecardsForWeekEnding, 10000);
     }
 
     $scope.weekEndingChanged = function(week_ending) {
@@ -87,7 +89,15 @@ function TimecardController($scope, $http, $timeout) {
         }
     }
 
-
+    $scope.addTimecard = function(week_ending) {
+        $http({
+            method: 'POST',
+            url: 'timecard/add/' + week_ending
+        }).success(function(existing_timecards) {
+            $scope.existing_timecards = existing_timecards
+            $scope.weekEndingChanged(week_ending);
+        });
+    }
 }
 
 function TimecardDetailController($scope, $http, $routeParams) {
@@ -98,23 +108,18 @@ function TimecardDetailController($scope, $http, $routeParams) {
         $scope.consultant = consultant;
     });
 
-    $http.get("../timecard/list_existing").success(function(existing_ending_dates) {
-        $scope.existing_timecards = existing_ending_dates;
-    });
-
     $http.get("rates").success(function(rates) {
        $scope.rates = rates;
     });
 
-    $scope.saveConsultant = function() {
-        $scope.edit = false;
-    }
-
-    $scope.updateTimecard = function(timecard) {
+    $scope.updateConsultant = function(consultant) {
         $http({
-            method: 'POST',
-            url: '/timecard/time_submitted',
-            params: {"week_ending" : timecard.week_ending, "beeline_guid" : $scope.beeline_guid, "hours_to_enter" : timecard.hours_submitted}
+            method: 'PUT',
+            url: "consultant/beeline_guid/" + consultant.beeline_guid,
+            data: JSON.stringify(consultant)
+        }).success(function(consultant) {
+           $scope.consultant = consultant;
+           $scope.edit = false;
         });
     }
 }
