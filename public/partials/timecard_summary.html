@@ -12,6 +12,7 @@
             <th>Total Hours Worked</th>
             <th>Total Hours Submitted</th>
             <th>Unsubmitted Hours</th>
+            <th>Real Hours Worked</th>
         </tr>
         <tr ng-repeat="consultant in consultants | orderBy: 'rolloff_date'">
             <td>{{consultant.id}}</td>
@@ -24,6 +25,7 @@
             <td>{{consultant.total_hours_worked}}</td>
             <td>{{consultant.total_hours_submitted}}</td>
             <td>{{consultant.total_hours_worked - consultant.total_hours_submitted}}</td>
+            <td>{{consultant.real_total_hours_worked}}</td>
         </tr>
     </table>
 </div>

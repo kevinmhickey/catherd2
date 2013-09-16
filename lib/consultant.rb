@@ -1,7 +1,14 @@
 require File.dirname(__FILE__) + '/timecard'
+require File.dirname(__FILE__) + '/date_range'
 require 'date'
 
 class Consultant
+  @@first_day_of_project = Date.new(2013, 7, 1)
+
+  def self.first_day_of_project= date
+    @@first_day_of_project = date
+  end
+
   def initialize id, last_name, first_name, grade, beeline_guid, project_name, first_billable_date, rolloff_date, timecards = {}
     @id = id
     @last_name = last_name
@@ -66,9 +73,27 @@ class Consultant
   end
 
   def hours_to_enter week_ending_date
-    return 0 if @timecards[week_ending_date].state == :SUBMITTED
+    return 0 if @timecards[week_ending_date].state == "SUBMITTED"
 
     total_hours_needed <= 80 ? total_hours_needed : 80
+  end
+
+  def hours_worked_as_of date
+    end_date = [date, @rolloff_date].min
+    begin_date = [@@first_day_of_project, @first_billable_date].max
+    whole_time = DateRange.new begin_date, end_date
+    days_worked = 20 * whole_time.complete_months_covered
+    if begin_date.day > 1 then
+      days_worked_first_month = DateRange.new(begin_date, Date.new(begin_date.year, begin_date.month, -1)).weekdays_covered
+      days_worked += [20, days_worked_first_month].min
+    end
+
+    if (end_date + 1).month == end_date.month then
+      days_worked_last_month = DateRange.new(Date.new(end_date.year, end_date.month, 1), end_date).weekdays_covered
+      days_worked += [20, days_worked_last_month].min
+    end
+
+    days_worked * 8
   end
 
   def timecard_for_entry week_ending_date
@@ -103,7 +128,8 @@ class Consultant
      :timecards => timecard_hashes,
      :hours_needed => total_hours_needed,
      :total_hours_worked => total_hours_worked,
-     :total_hours_submitted => total_hours_submitted
+     :total_hours_submitted => total_hours_submitted,
+     :real_total_hours_worked => hours_worked_as_of(Date.new(2013, 9, 1))
      }
   end
 

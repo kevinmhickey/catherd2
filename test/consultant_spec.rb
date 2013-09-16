@@ -206,3 +206,102 @@ describe 'Hours to enter calculation' do
     @consultant.timecard_for_entry(week_ending_date)["hours_to_enter"].should eq(80)
   end
 end
+
+describe 'Hours worked calculation' do
+  before :each do
+    Consultant.first_day_of_project = Date.new(2011, 1, 1)
+  end
+
+  it 'should limit to 160 hours for a complete month worked in the past' do
+    first_billable_date = Date.new(2013, 7, 1)
+    rolloff_date = Date.new(2013, 7, 31)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    consultant.hours_worked_as_of(Date.new(2013, 7, 31)).should eq(160)
+  end
+
+  it 'should total 8 times the number of weekdays on for a month where the first billable date is after the first' do
+    first_billable_date = Date.new(2013, 7, 8)
+    rolloff_date = Date.new(2013, 7, 31)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    consultant.hours_worked_as_of(Date.new(2013, 7, 31)).should eq(18 * 8)
+  end
+
+  it 'should total 8 times the number of weekdays on for a month where the rolloff date is before the end of the month' do
+    first_billable_date = Date.new(2013, 7, 1)
+    rolloff_date = Date.new(2013, 7, 19)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    consultant.hours_worked_as_of(Date.new(2013, 7, 31)).should eq(15 * 8)
+  end
+
+  it 'should only count time up to the requested date if the requested date falls before the rolloff date' do
+    first_billable_date = Date.new(2013, 7, 1)
+    rolloff_date = Date.new(2013, 7, 31)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    consultant.hours_worked_as_of(Date.new(2013, 7, 19)).should eq(15 * 8)
+  end
+
+  it 'should calculate correctly spanning months with all complete months' do
+    first_billable_date = Date.new(2012, 11, 1)
+    rolloff_date = Date.new(2014, 12, 31)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    consultant.hours_worked_as_of(Date.new(2013, 7, 31)).should eq(160 * 9)
+  end
+
+  it 'should calculate correctly spanning months with and incomplete beginning month' do
+    first_billable_date = Date.new(2012, 11, 18)
+    rolloff_date = Date.new(2014, 12, 31)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    hours_worked_for_complete_months = 160 * 8
+    hours_worked_in_first_month = 10 * 8
+    expected_hours_worked = hours_worked_for_complete_months + hours_worked_in_first_month
+    consultant.hours_worked_as_of(Date.new(2013, 7, 31)).should eq(expected_hours_worked)
+  end
+
+  it 'should calculate correctly spanning months with and incomplete ending month' do
+    first_billable_date = Date.new(2012, 11, 1)
+    rolloff_date = Date.new(2014, 12, 31)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    hours_worked_for_complete_months = 160 * 8
+    hours_worked_in_last_month = 15 * 8
+    expected_hours_worked = hours_worked_for_complete_months + hours_worked_in_last_month
+    consultant.hours_worked_as_of(Date.new(2013, 7, 19)).should eq(expected_hours_worked)
+  end
+
+  it 'should calculate correctly spanning months with and incomplete first and last month' do
+    first_billable_date = Date.new(2012, 11, 18)
+    rolloff_date = Date.new(2014, 12, 31)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    hours_worked_for_complete_months = 160 * 7
+    hours_worked_in_first_month = 10 * 8
+    hours_worked_in_last_month = 15 * 8
+    expected_hours_worked = hours_worked_for_complete_months + hours_worked_in_first_month + hours_worked_in_last_month
+    consultant.hours_worked_as_of(Date.new(2013, 7, 19)).should eq(expected_hours_worked)
+  end
+
+  it 'should use the first date of project as the beginning if it is after the first billable date' do
+    first_billable_date = Date.new(2012, 11, 18)
+    rolloff_date = Date.new(2014, 12, 31)
+    Consultant.first_day_of_project = Date.new(2013, 7, 1)
+
+    consultant = Consultant.new "", "", "", "", "", "", first_billable_date, rolloff_date
+
+    expected_hours_worked = 160 + 160 + 80
+    consultant.hours_worked_as_of(Date.new(2013, 9, 15)).should eq(expected_hours_worked)
+  end
+end

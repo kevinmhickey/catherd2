@@ -26,7 +26,7 @@ require 'consultant'
 
 def consultants_as_json
   consultant_hashes = []
-  @@consultants.each do |consultant|
+  @@herd.consultants.values.each do |consultant|
     consultant_hashes << consultant.to_hash
   end
 
